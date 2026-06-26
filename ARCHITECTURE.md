@@ -93,4 +93,4 @@ Forecasting models (SEIR, Prophet) are CPU-bound and computationally heavy. They
 - **Traffic Spikes:** API Gateway auto-scales the Core API pods via Kubernetes HPA based on CPU/Queue depth.
 
 ---
-*Document prepared by Antigravity HealthTech Solutions.*
+

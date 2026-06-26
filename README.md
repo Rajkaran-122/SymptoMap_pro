@@ -73,4 +73,4 @@ npm run dev
 
 SymptoMap V2 is designed to support HIPAA and GDPR compliance requirements. Open source under the MIT License.
 
-*Document prepared by Antigravity HealthTech Solutions.*
+

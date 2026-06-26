@@ -44,4 +44,4 @@ To transition SymptoMap from a passive data repository into an active "Intellige
 - **Orchestration:** `Celery` workers utilizing `Redis` as the broker to handle agent task queues.
 
 ---
-*Document prepared by Antigravity HealthTech Solutions.*
+

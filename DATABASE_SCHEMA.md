@@ -121,4 +121,4 @@ CREATE TABLE alert_rules (
 ```
 
 ---
-*Document prepared by Antigravity HealthTech Solutions.*
+
