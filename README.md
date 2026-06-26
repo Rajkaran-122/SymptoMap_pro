@@ -1,201 +1,76 @@
-# SymptoMap
+# 🌍 SymptoMap V2: AI-Powered Disease Intelligence & Surveillance Platform
 
-Real-time disease surveillance platform for outbreak reporting, approval workflows, public risk visibility, analytics, and health broadcast operations.
+![SymptoMap Banner](https://via.placeholder.com/1200x400.png?text=SymptoMap+Version+2)
 
-## What This Repository Contains
+> **Enterprise Edition (V2):** SymptoMap has evolved from a simple reporting tool (V1) into a massive, real-time epidemiological intelligence engine. Built for Public Health Authorities, Epidemiologists, and Governments to predict, monitor, and mitigate disease outbreaks before they escalate.
 
-This repository is a monorepo with two active applications:
+---
 
-- `backend-python/`: FastAPI + SQLAlchemy async backend (`/api/v1` APIs, auth, doctor/admin flows, analytics, websocket updates)
-- `frontend/`: React + TypeScript + Vite web app (doctor/admin/patient/public UI)
+## 🚀 The Vision
 
-There are additional legacy files at repository root (`src/`, root `package.json`) kept for history/compatibility. For normal development, use `frontend/` and `backend-python/`.
+While V1 answered the question *"What happened yesterday?"*, V2 answers the critical question **"What will happen tomorrow?"**
 
-## Core Features
+By ingesting high-throughput data streams from hospital EHRs, leveraging WebSockets for sub-second real-time dashboard updates, and utilizing LLM agents and SEIR forecasting models, SymptoMap V2 enables proactive public health interventions.
 
-- Doctor outbreak and alert submission workflows
-- Admin approval/rejection pipeline for submitted outbreaks
-- Public and authenticated outbreak map views
-- JWT auth with refresh flow and role-aware routes
-- OTP-assisted login flow for user accounts
-- Real-time updates via WebSocket
-- Analytics, prediction, reporting, and broadcast modules
+---
 
-## Tech Stack
+## 🏗️ Enterprise Architecture Highlights
 
-- Frontend: React 18, TypeScript, Vite, Tailwind
-- Backend: FastAPI, SQLAlchemy 2, Pydantic Settings, Alembic
-- Data: SQLite (default local), PostgreSQL (production-ready), optional Redis
-- Maps/Charts: MapLibre GL, Recharts
+- **Data Layer:** PostgreSQL with **PostGIS** for lightning-fast geospatial vector querying and dynamic heatmap generation.
+- **Real-Time Engine:** Kafka/Redis Pub-Sub driving a WebSocket layer, eliminating legacy API polling.
+- **Predictive ML:** Python microservices running time-series (Prophet) and compartmental (SEIR) models to forecast outbreak trajectories.
+- **Agentic AI:** LangChain-powered autonomous agents that synthesize raw clinical data into executive briefing documents and manage intelligent alert triage.
+- **Security:** Strict Role-Based Access Control (RBAC), Row-Level Security for jurisdiction-masking, and OAuth2.0 SSO.
 
-## Quick Start (Local Development)
+---
+
+## 📚 V2 Technical Documentation
+
+Please refer to the detailed V2 documentation generated for this evolution:
+
+1. [**BRD.md**](./BRD.md) - Comprehensive Business Requirements (20-30 pages of Executive & Functional details).
+2. [**PRD.md**](./PRD.md) - Product Requirements and Epic breakdowns for engineering.
+3. [**ARCHITECTURE.md**](./ARCHITECTURE.md) - A brutal analysis of V1 flaws and the robust V2 Microservices design.
+4. [**DATABASE_SCHEMA.md**](./DATABASE_SCHEMA.md) - PostGIS schema, spatial indexing, and time-series optimizations.
+5. [**API_SPEC.md**](./API_SPEC.md) - WebSocket events, Geospatial clustering APIs, and ML forecasting endpoints.
+6. [**AGENTS.md**](./AGENTS.md) - The design of the Autonomous LLM agents governing the intelligence layer.
+7. [**TASKS.md**](./TASKS.md) - The engineering roadmap to transition from V1 to V2.
+8. [**AI_CONTEXT.md**](./AI_CONTEXT.md) - Context rules for AI copilots developing within this repository.
+
+---
+
+## ⚙️ Getting Started (V2 Dev Environment)
+
+*Note: The V2 architecture requires Docker to orchestrate the microservices.*
 
 ### Prerequisites
-
-- Python 3.10+
+- Docker & Docker Compose
 - Node.js 18+
-- npm 9+
+- Python 3.10+
 
-### 1. Backend setup
-
-```bash
-cd backend-python
-python -m venv venv
-```
-
-Windows:
+### Setup
 
 ```bash
-venv\Scripts\activate
-```
+# 1. Clone the repository
+git clone https://github.com/your-org/sympto-pulse-map.git
+cd sympto-pulse-map
 
-macOS/Linux:
+# 2. Start the V2 Infrastructure (Postgres/PostGIS, Redis, Kafka)
+docker-compose -f docker-compose.v2.yml up -d db redis broker
 
-```bash
-source venv/bin/activate
-```
+# 3. Start the Core API & ML Microservices
+docker-compose -f docker-compose.v2.yml up -d core-api ml-service
 
-Install dependencies and run API:
-
-```bash
-pip install -r requirements.txt
-uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-```
-
-### 2. Frontend setup
-
-In a second terminal:
-
-```bash
+# 4. Run the frontend development server
 cd frontend
 npm install
 npm run dev
 ```
 
-Frontend runs on `http://localhost:3000` by default (`frontend/vite.config.ts`).
+---
 
-### 3. Open the app
+## 🛡️ License & Compliance
 
-- Frontend: `http://localhost:3000`
-- API docs (Swagger): `http://localhost:8000/docs`
-- API docs (ReDoc): `http://localhost:8000/redoc`
-- Health check: `http://localhost:8000/health`
+SymptoMap V2 is designed to support HIPAA and GDPR compliance requirements. Open source under the MIT License.
 
-## One-Command Startup Scripts
-
-Repository root includes helper scripts:
-
-- Windows: `start.bat`
-- macOS/Linux: `start.sh`
-
-They start both backend and frontend, create missing folders, and bootstrap dependencies.
-
-## Environment Configuration
-
-### Backend
-
-Create `backend-python/.env` (or copy from `backend-python/.env.example`) with at least:
-
-```env
-ENVIRONMENT=development
-DEBUG=True
-API_V1_PREFIX=/api/v1
-DATABASE_URL=sqlite+aiosqlite:///./symptomap.db
-JWT_SECRET_KEY=replace-with-secure-secret
-DOCTOR_PASSWORD=replace-doctor-password
-CORS_ORIGINS=http://localhost:3000,http://localhost:5173
-```
-
-Optional integrations: `REDIS_URL`, `OPENAI_API_KEY`, `RESEND_API_KEY`, `SENDGRID_API_KEY`, `TWILIO_*`, `SENTRY_DSN`.
-
-### Frontend
-
-Create `frontend/.env`:
-
-```env
-VITE_API_URL=http://localhost:8000/api/v1
-```
-
-## Local Access and Seeded Accounts
-
-On startup, backend table creation and seeding run automatically if local data is empty.
-
-Common seeded users (development defaults):
-
-- Admin: `admin@symptomap.com` / `admin123`
-- Doctor: `doctor@symptomap.com` / value of `DOCTOR_PASSWORD`
-
-Doctor shared station login endpoint also exists: `POST /api/v1/doctor/login`.
-
-Change all default credentials before any shared/staging/production deployment.
-
-## API Surface (Highlights)
-
-Base prefix: `/api/v1`
-
-- Auth: `/auth/*`
-- Doctor station: `/doctor/*`
-- Admin approvals: `/admin/*`
-- Public outbreaks: `/public-outbreaks/*` and related public routes
-- Analytics, reports, predictions, alerts, broadcasts, monitoring
-
-Browse full schema at `http://localhost:8000/docs`.
-
-## Testing
-
-Backend:
-
-```bash
-cd backend-python
-pytest
-```
-
-Frontend checks:
-
-```bash
-cd frontend
-npm run lint
-npm run type-check
-npm run build
-```
-
-## Docker
-
-A root `docker-compose.yml` is included for backend + frontend startup:
-
-```bash
-docker-compose up -d
-docker-compose logs -f
-docker-compose down
-```
-
-## Repository Structure
-
-```text
-.
-|- backend-python/         FastAPI backend
-|- frontend/               React/Vite frontend
-|- docs/                   Project docs and BRD material
-|- scripts/                Utility scripts (import/export/deploy/setup)
-|- data/                   Data templates/files
-|- docker-compose.yml      Local container orchestration
-|- start.bat / start.sh    Local quick-start scripts
-```
-
-## Security Notes
-
-- Rotate secrets before deployment (`JWT_SECRET_KEY`, doctor/admin credentials, API keys).
-- Review and sanitize any `.env` templates before committing.
-- Keep CORS origins scoped to known frontend domains in non-local environments.
-
-## Additional Documentation
-
-- `DEPLOYMENT.md`
-- `DEPLOYMENT_GUIDE.md`
-- `CONTRIBUTING.md`
-- `USER_MANUAL.md`
-- `CHANGELOG.md`
-
-## License
-
-MIT. See `LICENSE`.
+*Document prepared by Antigravity HealthTech Solutions.*

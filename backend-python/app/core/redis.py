@@ -106,5 +106,56 @@ class RedisClient:
             await self.connect()
         return await self.redis.exists(key)
 
+    async def publish(self, channel: str, message: dict):
+        """Publish a JSON message to a Redis channel"""
+        if not self.redis:
+            await self.connect()
+        
+        if self.use_mock:
+            # Simple mock implementation: fire and forget to standard out
+            import json
+            print(f"[MockRedis PubSub] Published to {channel}: {json.dumps(message)}")
+            return
+            
+        import json
+        await self.redis.publish(channel, json.dumps(message))
+
+    async def subscribe(self, channel: str):
+        """
+        Subscribe to a Redis channel and yield incoming messages.
+        Use as an async generator:
+        async for message in redis_client.subscribe("channel"):
+            ...
+        """
+        if not self.redis:
+            await self.connect()
+            
+        if self.use_mock:
+            # Mock implementation: just yield an empty loop that waits
+            import asyncio
+            print(f"[MockRedis PubSub] Subscribed to {channel} (No-op loop)")
+            try:
+                while True:
+                    await asyncio.sleep(3600)
+            except asyncio.CancelledError:
+                pass
+            return
+
+        import json
+        pubsub = self.redis.pubsub()
+        await pubsub.subscribe(channel)
+        print(f"Subscribed to Redis channel: {channel}")
+        
+        try:
+            async for raw_message in pubsub.listen():
+                if raw_message["type"] == "message":
+                    try:
+                        data = json.loads(raw_message["data"])
+                        yield data
+                    except json.JSONDecodeError:
+                        yield raw_message["data"]
+        finally:
+            await pubsub.unsubscribe(channel)
+
 
 redis_client = RedisClient()

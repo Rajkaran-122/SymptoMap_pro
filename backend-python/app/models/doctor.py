@@ -26,6 +26,7 @@ class DoctorOutbreak(Base):
     
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     status = Column(String(50), default='pending')  # pending, approved, rejected
+    ai_summary = Column(Text, nullable=True)
 
 class DoctorAlert(Base):
     __tablename__ = "doctor_alerts"

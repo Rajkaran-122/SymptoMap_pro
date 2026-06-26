@@ -250,9 +250,15 @@ async def lifespan(app: FastAPI):
     # Connect to Redis
     await redis_client.connect()
     
+    # Start Redis Pub/Sub listener for WebSockets
+    import asyncio
+    from app.websocket.manager import manager
+    redis_listener_task = asyncio.create_task(manager.listen_to_redis())
+    
     yield
     
     # Shutdown
+    redis_listener_task.cancel()
     print("[INFO] Shutting down SymptoMap Backend...")
     await redis_client.disconnect()
 

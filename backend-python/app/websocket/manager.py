@@ -85,6 +85,54 @@ class ConnectionManager:
         """Get the number of active connections"""
         return len(self.active_connections)
 
+    async def listen_to_redis(self):
+        """
+        Background task that listens to the Redis channel 'symptomap:events'
+        and broadcasts any received events to all connected local WebSockets.
+        """
+        from app.core.redis import redis_client
+        import asyncio
+        import json
+        
+        logger.info("Starting Redis Pub/Sub listener for WebSockets...")
+        
+        while True:
+            try:
+                # This will yield messages as they arrive
+                async for message in redis_client.subscribe("symptomap:events"):
+                    # If message is string, try to parse it
+                    if isinstance(message, str):
+                        try:
+                            message = json.loads(message)
+                        except json.JSONDecodeError:
+                            message = {"type": "UNKNOWN", "data": message}
+                            
+                    # We use an internal _broadcast method to avoid circular timestamping/logging issues,
+                    # or just reuse broadcast and ensure we don't double timestamp if we don't want to.
+                    await self._broadcast_internal(message)
+                    
+            except asyncio.CancelledError:
+                logger.info("Redis Pub/Sub listener task cancelled")
+                break
+            except Exception as e:
+                logger.error(f"Error in Redis Pub/Sub listener: {e}")
+                # Wait before reconnecting to prevent tight failure loops
+                await asyncio.sleep(5)
+
+    async def _broadcast_internal(self, message: Dict[str, Any]):
+        """Internal broadcast method that skips adding duplicate timestamps"""
+        if not self.active_connections:
+            return
+            
+        disconnected = []
+        for connection in self.active_connections:
+            try:
+                await connection.send_json(message)
+            except Exception as e:
+                disconnected.append(connection)
+                
+        for connection in disconnected:
+            self.disconnect(connection)
 
 # Global connection manager instance
 manager = ConnectionManager()

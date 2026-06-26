@@ -38,14 +38,8 @@ class UUID(TypeDecorator):
                 return value
         return value
 
-# Mock Geography as String for SQLite compatibility
-class Geography(TypeDecorator):
-    """
-    Geography type that falls back to String for SQLite/Lite mode.
-    Note: Real spatial queries will fail if not handled in service layer.
-    """
-    impl = String
-    cache_ok = True
-    
-    def __init__(self, geometry_type='POINT', srid=4326, **kwargs):
-        super().__init__(**kwargs)
+# Use PostGIS Geography/Geometry from GeoAlchemy2
+from geoalchemy2 import Geometry
+
+# For backward compatibility with models importing Geography
+Geography = Geometry

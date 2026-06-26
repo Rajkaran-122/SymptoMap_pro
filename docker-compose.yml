@@ -15,6 +15,12 @@ services:
       - ACCESS_TOKEN_EXPIRE_HOURS=24
       - DOCTOR_PASSWORD=${DOCTOR_PASSWORD:-Doctor@SymptoMap2025}
       - CORS_ORIGINS=http://localhost:3000,http://localhost:80,https://symptomap.onrender.com
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/symptomap
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     volumes:
       - ./data:/app/data
       - sqlite-data:/app
@@ -23,6 +29,28 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    restart: unless-stopped
+    networks:
+      - symptomap-network
+
+  # Celery Worker for AI Agents
+  celery_worker:
+    build:
+      context: ./backend-python
+      dockerfile: Dockerfile
+    container_name: symptomap-celery-worker
+    command: celery -A app.core.celery_app worker --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/symptomap
+      - REDIS_URL=redis://redis:6379/0
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/data
     restart: unless-stopped
     networks:
       - symptomap-network
@@ -43,8 +71,46 @@ services:
     networks:
       - symptomap-network
 
+  # PostGIS Database
+  db:
+    image: postgis/postgis:15-3.4
+    container_name: symptomap-postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=symptomap
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - symptomap-network
+
+  # Redis for Pub/Sub and Caching
+  redis:
+    image: redis:7-alpine
+    container_name: symptomap-redis
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - symptomap-network
+
 volumes:
   sqlite-data:
+  postgres-data:
+  redis-data:
 
 networks:
   symptomap-network:

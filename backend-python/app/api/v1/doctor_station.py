@@ -163,9 +163,14 @@ async def submit_outbreak(
         
         outbreak_id = new_outbreak.id
         
+        # Trigger Celery Summarizer Agent
+        from app.agents.summarizer import summarize_outbreak_task
+        summarize_outbreak_task.delay(outbreak_id)
+        
         # BROADCAST TO ALL CONNECTED CLIENTS (non-blocking)
         try:
-            await manager.broadcast({
+            from app.core.redis import redis_client
+            await redis_client.publish("symptomap:events", {
                 "type": "NEW_OUTBREAK",
                 "data": {
                     "id": outbreak_id,
@@ -278,9 +283,14 @@ async def submit_alert(
             print(f"⚠️ Failed to sync alert to main table: {sync_err}")
             print(traceback.format_exc())
 
+        # Trigger Celery Triage Agent
+        from app.agents.triage import triage_alert_task
+        triage_alert_task.delay(alert_id)
+
         # BROADCAST TO ALL CONNECTED CLIENTS (non-blocking)
         try:
-            await manager.broadcast({
+            from app.core.redis import redis_client
+            await redis_client.publish("symptomap:events", {
                 "type": "NEW_ALERT",
                 "data": {
                     "id": alert_id,

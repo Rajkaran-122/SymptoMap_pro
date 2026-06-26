@@ -45,6 +45,8 @@ def run_migrations_offline() -> None:
     url = settings.DATABASE_URL
     if url.startswith("sqlite:///"):
          url = url.replace("sqlite:///", "sqlite+aiosqlite:///")
+    elif url.startswith("postgresql+asyncpg://"):
+         url = url.replace("postgresql+asyncpg://", "postgresql://")
     
     context.configure(
         url=url,
@@ -64,6 +66,8 @@ def run_migrations_online() -> None:
     # Alembic needs a sync driver for migration execution
     if url.startswith("sqlite+aiosqlite:///"):
         url = url.replace("sqlite+aiosqlite:///", "sqlite:///")
+    elif url.startswith("postgresql+asyncpg://"):
+        url = url.replace("postgresql+asyncpg://", "postgresql://")
     
     configuration = config.get_section(config.config_ini_section, {})
     configuration["sqlalchemy.url"] = url
