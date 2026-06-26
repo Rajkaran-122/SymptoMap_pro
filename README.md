@@ -270,11 +270,33 @@ docker-compose down
 
 ## Additional Documentation
 
-*   [DEPLOYMENT.md](DEPLOYMENT.md)
-*   [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
-*   [CONTRIBUTING.md](CONTRIBUTING.md)
-*   [USER_MANUAL.md](USER_MANUAL.md)
-*   [CHANGELOG.md](CHANGELOG.md)
+All detailed project documentation has been consolidated into the `docs/` directory:
+
+### Core Architecture & Guidelines
+*   [Architecture Overview](docs/ARCHITECTURE.md)
+*   [Database Schema](docs/DATABASE_SCHEMA.md)
+*   [AI Agents Overview](docs/AGENTS.md)
+*   [API Specification](docs/API_SPEC.md)
+
+### Deployment & Operations
+*   [Deployment Guide](docs/DEPLOYMENT_GUIDE.md)
+*   [Deployment Checklist](docs/DEPLOYMENT_CHECKLIST.md)
+*   [Doctor Station Deployment](docs/DOCTOR_STATION_DEPLOYMENT.md)
+
+### Requirements & Planning
+*   [Product Requirements (PRD)](docs/PRD.md)
+*   [Business Requirements (BRD)](docs/BRD.md)
+*   [Tasks & Roadmap](docs/TASKS.md)
+
+### User Guides & Reference
+*   [Start Here](docs/START_HERE.md)
+*   [User Manual](docs/USER_MANUAL.md)
+*   [Doctor User Guide](docs/DOCTOR_USER_GUIDE.md)
+*   [Quick Reference](docs/QUICK_REFERENCE.md)
+
+### Project Meta
+*   [Contributing](docs/CONTRIBUTING.md)
+*   [Changelog](docs/CHANGELOG.md)
 
 ## License
 
