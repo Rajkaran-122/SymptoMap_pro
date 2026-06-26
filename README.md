@@ -1,5 +1,7 @@
 # SymptoMap
 
+**Live Deployment:** [https://symptomap-2-python.vercel.app/](https://symptomap-2-python.vercel.app/)
+
 Real-time disease surveillance platform for outbreak reporting, approval workflows, public risk visibility, analytics, and health broadcast operations.
 
 ## Architecture and System Flow
