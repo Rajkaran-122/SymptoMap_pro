@@ -1,96 +1,227 @@
-# System Architecture (Version 2)
-## SymptoMap: AI-Powered Disease Intelligence Platform
+# System Architecture
+## SymptoMap Healthcare Intelligence Platform — V1 Reality and V2 Target Design
 
-This document provides a brutal, unvarnished analysis of the SymptoMap V1 architecture and outlines the robust, scalable, enterprise-grade architecture for Version 2.
-
----
-
-## 1. V1 Architecture: The Brutal Reality
-
-SymptoMap V1 was built as a proof-of-concept. While functional for a hackathon or a small clinic, it fundamentally fails at enterprise scale.
-
-### 1.1. The "Polling" Problem (Client-to-Server)
-**Current State:** The V1 React frontend polls the `/outbreaks/all` REST API every 30 seconds to fetch updates.
-**The Brutal Reality:** If 10,000 users have the dashboard open, that's 20,000 requests per minute fetching identical, mostly unchanged JSON payloads. This wastes massive amounts of bandwidth, drains mobile batteries, and unnecessarily spikes server CPU. It is an anti-pattern for "real-time" dashboards.
-
-### 1.2. The SQLite Bottleneck (Data Layer)
-**Current State:** All data is written to a single `symptomap.db` SQLite file.
-**The Brutal Reality:** SQLite locks the entire database on writes. During an outbreak, if 500 hospitals try to submit data concurrently, the database will lock, HTTP requests will timeout, and critical health data will be dropped. Furthermore, SQLite has no native geospatial indexing; determining "cases within 50km of X" requires pulling all records into Python memory and computing distances, which is computationally catastrophic at scale.
-
-### 1.3. The Monolithic Coupling (Backend)
-**Current State:** FastAPI serves authentication, data ingestion, reporting, and dashboard APIs from a single monolithic thread pool.
-**The Brutal Reality:** A spike in read requests for the dashboard will consume all Uvicorn worker threads, effectively blocking doctors from submitting new life-saving outbreak data. The read-path and write-path are dangerously entangled.
-
-### 1.4. The Missing "Intelligence" (AI/ML)
-**Current State:** The system is just a CRUD app on a map.
-**The Brutal Reality:** It tells you what happened yesterday, not what will happen tomorrow. There is no predictive capability, no anomaly detection, and no automated risk assessment.
+This document provides a rigorous technical analysis of the current V1 architecture, identifies its structural bottlenecks at scale, and defines the target V2 enterprise architecture that resolves each bottleneck with established distributed systems patterns.
 
 ---
 
-## 2. V2 System Design: Enterprise Architecture
+## 1. V1 Architecture: Implemented Reality
 
-To solve the V1 bottlenecks, SymptoMap V2 adopts an **Event-Driven, Microservices Architecture** optimized for high-throughput ingestion and real-time geospatial intelligence.
+SymptoMap V1 is a functional proof-of-concept demonstrating the full surveillance workflow. The current deployment runs a React 18 frontend against a FastAPI async backend backed by SQLite, with 200,000+ seeded disease records across Indian hospitals and real-time communication via WebSockets with a Mock Redis pub/sub layer when a production Redis instance is unavailable.
 
-### 2.1. High-Level Architecture Diagram
+### 1.1 V1 Architecture Diagram
 
-```text
-[ Clients (Web / Mobile PWA) ]
-         │ (HTTPS / WSS)
-         ▼
-[ API Gateway / Load Balancer (Nginx / Kong) ]
-         │
-         ├──► (WebSockets) ──► [ Real-time Notification Service (Node.js/Socket.io) ]
-         │
-         ├──► (REST API) ────► [ Core API Service (FastAPI) ] ──(Writes)──► [ Message Broker (Kafka/RabbitMQ) ]
-         │                                   │ (Reads)                            │
-         │                                   ▼                                    ▼
-         │                        [ Redis Caching Layer ]               [ Data Ingestion Workers (Python) ]
-         │                                                                        │
-         ▼                                                                        ▼
-[ ML & Forecasting Microservice (Python/Ray) ] <──(Batch/Stream)──> [ PostgreSQL + PostGIS (Primary DB) ]
-         │                                                                        │
-         ▼                                                                        ▼
-[ LLM Agentic Framework (LangChain/CrewAI) ] ───────────────────────> [ Data Warehouse (ClickHouse) ] (Optional V3)
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1a1a2e', 'primaryTextColor': '#e0e0e0', 'primaryBorderColor': '#4a4a8a', 'lineColor': '#7a7aaa', 'secondaryColor': '#16213e', 'mainBkg': '#0f0f1a', 'textColor': '#e0e0e0', 'fontFamily': 'monospace'}}}%%
+graph TD
+    subgraph Clients["Client Layer"]
+        AdminUI["Admin Command Center\nReact 18 + TypeScript + MapLibre GL"]
+        DoctorUI["Doctor Station\nAuthenticated Submission Portal"]
+        PublicUI["Public Disease Map\nMapLibre GL + Leaflet"]
+        HealthAgent["Health Agent\nhealthzy.app — External"]
+    end
+
+    subgraph Gateway["API Gateway — FastAPI Async"]
+        Auth["JWT Authentication\nRole: admin / doctor / public"]
+        RateLimit["Rate Limiting\n100 req/min per IP"]
+        Sanitizer["Input Sanitization\nPydantic v2 + HTML sanitizer"]
+    end
+
+    subgraph Routes["API Route Layer"]
+        OutbreakRoute["POST /outbreaks/\nGET /outbreaks/all\nGET /outbreaks/stats"]
+        DoctorRoute["POST /doctor/outbreak\nPOST /doctor/alert\nGET /doctor/stats"]
+        AdminRoute["GET /admin/pending\nPOST /admin/approve\nPOST /broadcasts"]
+        StatsRoute["GET /stats/dashboard\nGET /stats/zones\nGET /analytics/*"]
+        WSRoute["WS /ws\nWebSocket Event Stream"]
+    end
+
+    subgraph Workers["Celery AI Worker Cluster"]
+        Summarizer["Outbreak Summarizer\nLLM-based AI summary generation"]
+        Triage["Triage Agent\nSeverity scoring + prioritization"]
+        ZoneAgent["Epidemiological Zoning Agent\nRisk zone classification by density"]
+        AQIAgent["AQI Intelligence Agent\nViral fever risk prediction from AQI data"]
+    end
+
+    subgraph Data["Data Layer"]
+        SQLite[("SQLite — symptomap.db\n200,002 records\ndoctor_outbreaks + hospitals")]
+        MockRedis["Mock Redis / Redis\nPub-Sub + Task Queue\nFallback: in-memory"]
+        AuditDB["Audit Log Table\nAll write operations tracked"]
+    end
+
+    AdminUI & DoctorUI & PublicUI --> Auth
+    HealthAgent -->|"Outbreak alert subscription"| WSRoute
+    Auth --> RateLimit --> Sanitizer
+    Sanitizer --> OutbreakRoute & DoctorRoute & AdminRoute & StatsRoute
+    OutbreakRoute & DoctorRoute --> SQLite
+    OutbreakRoute & DoctorRoute -->|"Enqueue AI task"| MockRedis
+    StatsRoute & AdminRoute --> SQLite
+    MockRedis -->|"Consume task"| Workers
+    Workers --> SQLite
+    Workers -->|"Publish event"| MockRedis
+    MockRedis --> WSRoute
+    WSRoute -->|"Push delta"| AdminUI & PublicUI & HealthAgent
+    SQLite --> AuditDB
 ```
 
-### 2.2. Core System Design Concepts Applied
+### 1.2 V1 Bottlenecks at Scale
 
-#### A. Command Query Responsibility Segregation (CQRS) & Event Queues
-- **Write Path:** When a doctor submits a case, the Core API instantly validates it and pushes an event (`case_submitted`) to **Kafka**. The API returns `200 OK` in < 20ms. Background workers consume the Kafka queue, perform heavy geocoding, and write to the database. This guarantees zero data loss during traffic spikes.
-- **Read Path:** Dashboards read from a highly optimized, read-only replica of the database, heavily buffered by **Redis**.
-
-#### B. WebSockets for Real-Time State
-Instead of polling, clients connect via WebSockets. When the ingestion worker writes a new case to the database, it publishes a message to a Redis Pub/Sub channel. The Real-time Notification Service broadcasts this delta to all connected clients. Clients patch their local state instantly.
-
-#### C. PostGIS for Geospatial Dominance
-SQLite is replaced by **PostgreSQL** heavily utilizing the **PostGIS** extension.
-- We utilize `GEOMETRY` and `GEOGRAPHY` data types.
-- PostGIS enables lightning-fast spatial queries natively in the DB: e.g., `SELECT * FROM outbreaks WHERE ST_DWithin(location, ST_MakePoint(lon, lat), 50000)`.
-- R-Tree (GiST) indexing ensures spatial queries execute in milliseconds, even with millions of rows.
-
-#### D. AI & ML Microservices De-coupling
-Forecasting models (SEIR, Prophet) are CPU-bound and computationally heavy. They run in a separate Microservice container cluster.
-- The ML Service periodically pulls recent data, runs simulations, and writes forecast vectors back to a specific `forecasts` table.
-- Agentic LLMs (e.g., automated report generators) operate asynchronously triggered by CRON or specific threshold events, ensuring they never block core HTTP traffic.
-
-#### E. Multi-Tier Caching (Redis)
-- **Geospatial Tiles:** Complex heatmap vector calculations are cached in Redis. If 10,000 users look at the National Map, the DB is hit exactly once. The cache is invalidated only when a new case in that region is processed via the Kafka queue.
-
-### 2.3. Tech Stack Upgrades
-
-| Component | V1 (Current) | V2 (Target) | Justification |
-| :--- | :--- | :--- | :--- |
-| **Database** | SQLite | PostgreSQL + PostGIS | Concurrency, Spatial queries, Reliability |
-| **Real-time** | HTTP Polling (30s) | WebSockets (WSS) | Lower latency, reduced server load |
-| **Queueing** | None (Synchronous) | Apache Kafka / Redis Streams | Durability during traffic spikes |
-| **Caching** | None | Redis | Millisecond dashboard load times |
-| **AI/ML** | None | Prophet, XGBoost, LangChain | Predictive capabilities, automated reporting |
-| **Auth** | Basic JWT (1 shared pass) | OAuth2.0 / RBAC | Enterprise security, role separation |
-
-### 2.4. Failure Modes & Resilience
-- **Database Failure:** Core API continues to accept submissions, buffering them in Kafka. Once DB recovers, workers drain the queue. (Eventual Consistency).
-- **ML Node Failure:** Dashboards degrade gracefully, showing historical data while hiding the 'Forecast' tab until ML nodes restart.
-- **Traffic Spikes:** API Gateway auto-scales the Core API pods via Kubernetes HPA based on CPU/Queue depth.
+| Bottleneck | V1 Reality | Impact at Scale |
+|:---|:---|:---|
+| Polling anti-pattern | Frontend polls `/outbreaks/all` every 30 seconds | 10,000 active users = 20,000 requests/minute fetching unchanged JSON |
+| SQLite write locks | Single-file DB locks on every write | 500 concurrent doctor submissions cause lock contention and request timeouts |
+| Monolithic read/write path | Dashboard reads and outbreak writes share the same Uvicorn worker pool | Dashboard traffic starves the write path; critical outbreak data is delayed |
+| No predictive intelligence | System is a CRUD map — it shows what happened, not what will happen | Zero outbreak forecasting; no anomaly detection; reactive not proactive |
+| Mock Redis | In-memory Redis replacement resets on restart | No message durability; tasks lost on process restart in local dev |
 
 ---
 
+## 2. V2 Target Architecture: Enterprise Design
+
+V2 adopts an event-driven, microservices architecture with Command Query Responsibility Segregation (CQRS), resolving each V1 bottleneck with a proven distributed systems pattern.
+
+### 2.1 V2 Architecture Diagram
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1a1a2e', 'primaryTextColor': '#e0e0e0', 'primaryBorderColor': '#4a4a8a', 'lineColor': '#7a7aaa', 'secondaryColor': '#16213e', 'mainBkg': '#0f0f1a', 'textColor': '#e0e0e0', 'fontFamily': 'monospace'}}}%%
+graph TD
+    subgraph Clients["Client Layer"]
+        Web["Web App\nReact 18 + PWA"]
+        Mobile["Native Mobile\niOS / Android"]
+        HealthAgent["Health Agent\nhealthzy.app"]
+    end
+
+    subgraph EdgeLayer["Edge and Load Balancing"]
+        CDN["CDN\nCloudflare / Vercel Edge"]
+        LB["API Gateway / Load Balancer\nNginx / Kong"]
+    end
+
+    subgraph CommandPath["Write Path — Command Side (CQRS)"]
+        WriteAPI["Core Ingestion API\nFastAPI — Write-Optimized"]
+        EventBus["Event Bus\nApache Kafka / Redis Streams"]
+        IngestionWorkers["Data Ingestion Workers\nPython — Kafka Consumers"]
+    end
+
+    subgraph QueryPath["Read Path — Query Side (CQRS)"]
+        ReadAPI["Read API Service\nFastAPI — Read-Optimized"]
+        ReadReplica[("Read Replica\nPostgreSQL — Async Replication")]
+        TileCache["Geospatial Tile Cache\nRedis — Heatmap vector cache\nInvalidated per-region on new event"]
+    end
+
+    subgraph RealtimePath["Real-Time Path"]
+        WSService["WebSocket Notification Service\nNode.js / Socket.io"]
+        PubSub["Redis Pub/Sub\nEvent fan-out to clients"]
+    end
+
+    subgraph DataLayer["Primary Data Layer"]
+        PrimaryDB[("PostgreSQL + PostGIS\nPrimary Write DB\nSpatial indexes on GEOGRAPHY columns\nST_DWithin for radius queries")]
+    end
+
+    subgraph AILayer["AI and ML Services"]
+        CeleryCluster["Celery Worker Cluster\nSummarizer + Triage + Zoning + AQI"]
+        MLService["ML Forecasting Microservice\nSEIR model + Prophet time-series\nRay distributed compute"]
+        LLMAgents["LLM Agentic Layer\nLangGraph orchestration\nGPT-4o + Claude + Grok failover"]
+    end
+
+    subgraph Monitoring["Observability"]
+        Metrics["Metrics\nPrometheus + Grafana"]
+        Tracing["Distributed Tracing\nOpenTelemetry + Jaeger"]
+        AuditLog["Audit Trail\nImmutable append-only log"]
+    end
+
+    Web & Mobile & HealthAgent --> CDN --> LB
+    LB -->|"Writes — doctor submissions, reports"| WriteAPI
+    LB -->|"Reads — dashboard, map, analytics"| ReadAPI
+    LB -->|"WebSocket upgrade"| WSService
+
+    WriteAPI -->|"Validates, returns 200ms"| EventBus
+    EventBus --> IngestionWorkers
+    IngestionWorkers --> PrimaryDB
+    IngestionWorkers -->|"Triggers AI pipeline"| CeleryCluster
+    IngestionWorkers -->|"Publishes OUTBREAK_REPORTED event"| PubSub
+
+    ReadAPI --> TileCache
+    TileCache -->|"Cache miss"| ReadReplica
+    PrimaryDB -->|"Async replication"| ReadReplica
+    TileCache -->|"Cache invalidation on event"| PubSub
+
+    CeleryCluster --> PrimaryDB
+    CeleryCluster -->|"Triggers on threshold"| LLMAgents
+    MLService -->|"Batch forecast writes"| PrimaryDB
+    LLMAgents -->|"Advisory content"| PubSub
+
+    PubSub --> WSService
+    WSService -->|"Delta push — no polling"| Web & Mobile & HealthAgent
+
+    WriteAPI & ReadAPI & WSService --> Metrics & Tracing
+    PrimaryDB --> AuditLog
+```
+
+### 2.2 Core Design Patterns Applied
+
+**CQRS — Command Query Responsibility Segregation**
+The write path (doctor submissions, outbreak reports) is completely separated from the read path (dashboard queries, map data). The Core Ingestion API validates and acknowledges a submission in under 20ms by publishing to the event bus — it never waits for the database write to complete. Background workers drain the event queue and persist data. Dashboards read from a read-optimized replica, never touching the primary write database.
+
+**Event-Driven Architecture with Kafka**
+Every outbreak submission produces an immutable event to the Kafka topic. This gives: (a) zero data loss during traffic spikes — the queue absorbs all writes while workers process at their own rate; (b) full replay capability — if an AI agent is upgraded, it can reprocess all historical events; (c) decoupled consumers — adding a new downstream service (e.g., a new notification channel) requires no changes to the ingestion API.
+
+**PostGIS for Geospatial Query Performance**
+SQLite is replaced by PostgreSQL with the PostGIS extension. All location data is stored as native `GEOGRAPHY(POINT, 4326)` columns with GiST (R-Tree) spatial indexes. A query like "find all outbreaks within 50km of a given coordinate" executes as a single indexed spatial query (`ST_DWithin`) in milliseconds on millions of rows — versus pulling all records into Python memory in V1.
+
+**Multi-Tier Redis Caching for Geospatial Tiles**
+Heatmap vector calculations are expensive. In V2, the computed GeoJSON tile for each viewport region is cached in Redis with a region-keyed TTL. Ten thousand simultaneous dashboard users hitting the same national map view result in exactly one database query. Cache entries are selectively invalidated only when a new outbreak event lands in that specific geographic region, via the Pub/Sub event stream.
+
+**WebSocket Push Replacing Polling**
+Clients connect once via WebSocket. When the event bus processes a new outbreak, it publishes a delta event to Redis Pub/Sub. The WebSocket Notification Service fans this out to all connected clients. Clients apply the delta to their local state in-place. No polling. No redundant full-payload fetches.
+
+**ML Microservice Decoupling**
+Forecasting models (SEIR epidemiological simulation, Prophet time-series) are CPU-bound and take seconds to minutes to run. In V2 they run in a dedicated ML microservice cluster managed by Ray for distributed compute. The ML service periodically writes forecast records to a dedicated `predictions` table. If the ML cluster fails, the surveillance dashboard degrades gracefully — it hides the forecast tab and shows historical data. Core outbreak reporting is entirely unaffected.
+
+### 2.3 Tech Stack: V1 to V2 Upgrade Path
+
+| Component | V1 Current | V2 Target | Justification |
+|:---|:---|:---|:---|
+| Database | SQLite (file lock on write) | PostgreSQL + PostGIS | Concurrent writes, spatial indexing, replication |
+| Real-time | HTTP polling every 30 seconds | WebSockets + Redis Pub/Sub | Zero-latency deltas, no redundant bandwidth |
+| Message Queue | Celery + Mock Redis | Apache Kafka / Redis Streams | Durable event log, zero data loss on restart |
+| Caching | None | Redis multi-tier (tile + query) | Sub-millisecond dashboard reads at scale |
+| AI/ML | Synchronous Celery tasks | Ray distributed ML microservice | CPU-bound forecasting isolated from API latency |
+| LLM Orchestration | Direct calls in worker threads | LangGraph stateful agent framework | Stateful multi-turn reasoning, prompt versioning |
+| Auth | JWT shared password | OAuth 2.0 + RBAC with per-doctor tokens | Enterprise security, individual accountability |
+| Observability | Print statements | Prometheus + Grafana + OpenTelemetry | Production alerting and distributed tracing |
+| Deployment | Single Uvicorn process | Kubernetes with HPA auto-scaling | Horizontal scale on demand, zero-downtime deploys |
+
+### 2.4 Failure Mode Analysis
+
+| Failure | V1 Behavior | V2 Behavior |
+|:---|:---|:---|
+| Database becomes unavailable | All API endpoints return 500; submissions are lost | Write API continues accepting submissions into Kafka queue; data is persisted once DB recovers (eventual consistency) |
+| ML service crashes | None (no ML service) | Dashboard hides forecast tab; real-time surveillance continues unaffected |
+| Redis unavailable | Falls back to Mock Redis (in-memory, resets on restart) | WebSocket push degrades to client-side polling fallback; no data loss |
+| Traffic spike (10x normal load) | Uvicorn workers exhaust; requests queue or timeout | Kubernetes HPA scales API pods based on CPU and Kafka queue depth; event bus absorbs write burst |
+| Single AI worker crashes | Task is lost | Kafka consumer group rebalances; another worker picks up the task from the committed offset |
+
+---
+
+## 3. Health Agent Architecture Integration
+
+The Health Agent at [healthzy.app](https://healthzy.app/) connects to SymptoMap as an event consumer via the WebSocket bridge. In V2, this becomes a dedicated integration point:
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1a1a2e', 'primaryTextColor': '#e0e0e0', 'lineColor': '#7a7aaa', 'mainBkg': '#0f0f1a', 'textColor': '#e0e0e0', 'fontFamily': 'monospace'}}}%%
+sequenceDiagram
+    participant SM as SymptoMap Event Bus
+    participant Bridge as Integration Bridge API
+    participant HA as Health Agent LangGraph
+    participant LLM as Multi-LLM Layer
+    participant User as Patient
+
+    SM->>Bridge: OUTBREAK_APPROVED event (disease, location, severity)
+    Bridge->>Bridge: Geocode affected radius
+    Bridge->>HA: POST /api/outbreak-context (structured alert payload)
+    HA->>HA: Identify active sessions in affected area
+    HA->>LLM: Inject outbreak context into session state
+    LLM-->>HA: Updated recommendations with outbreak awareness
+    HA->>User: Real-time advisory: outbreak in your area, avoid X, do Y
+```
+
+This integration ensures that when a doctor reports a severe outbreak in Mumbai via SymptoMap, every active Health Agent consultation session for a user in the affected radius receives contextual outbreak awareness injected into their ongoing diagnostic session — without the user needing to do anything.

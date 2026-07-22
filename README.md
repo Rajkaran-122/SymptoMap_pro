@@ -419,23 +419,68 @@ Zero data loss. 3 outbreak clusters detected and contained early.
 
 ---
 
-## 📁 Documentation Directory
+## Documentation Directory
 
-To evaluate this project, please review the core architectural documents in the [`docs/`](./docs/) folder:
-
-| Document | Description |
-|---|---|
-| [HLD — High-Level Design](./docs/SYMPTOMAP_HLD.md) | Visual system architecture: ingestion, multi-agent AI core, geospatial surveillance |
-| [LLD — Low-Level Design](./docs/SYMPTOMAP_LLD.md) | Sequence diagrams for approval pipeline, zoning flows, and database schemas |
-| [BRD — Business Requirements](./docs/BRD.md) | Full product specification, user stories, and business goals |
-| [Architecture](./docs/ARCHITECTURE.md) | Detailed component architecture and data flow |
-| [API Spec](./docs/API_SPEC.md) | All API endpoint specifications |
-| [Database Schema](./docs/DATABASE_SCHEMA.md) | Entity-relationship diagrams and schema definitions |
-| [Doctor User Guide](./docs/DOCTOR_USER_GUIDE.md) | Step-by-step guide for healthcare providers |
-| [Deployment Guide](./docs/DEPLOYMENT_GUIDE.md) | Full production deployment instructions |
-| [Proprietary Notice](./docs/PROPRIETARY_NOTICE.md) | Legal terms and licensing information |
+The `docs/` folder contains the full technical and product documentation for this ecosystem. Documents are organized by layer — architecture, product, implementation, and legal — and together form a complete picture of how the system is designed, built, and operated.
 
 ---
+
+### Architecture Documents
+
+**[High-Level Design — HLD](./docs/SYMPTOMAP_HLD.md)**
+
+The authoritative system architecture document. Contains the full Mermaid architecture diagram covering all data sources (doctor submissions, IoT AQI sensors, satellite/meteorological APIs, public health records), the FastAPI ingestion gateway, the SQLite/PostgreSQL persistence layer, the Redis Pub/Sub messaging backbone, and the Celery multi-agent AI worker cluster — comprising the Outbreak Summarizer, Triage Agent, Epidemiological Zoning Agent, and AQI Intelligence Agent. Documents all client-facing surfaces: Admin Command Center, Doctor Station, Public Map, and the Health Agent integration bridge. Covers the extended Air Quality Intelligence module and key architectural decisions including geography column deferral for SQLite/PostGIS dual compatibility.
+
+**[Low-Level Design — LLD](./docs/SYMPTOMAP_LLD.md)**
+
+The micro-level specification. Contains three complete sequence diagrams: (1) Doctor Outbreak Submission and Admin Approval pipeline — the full lifecycle from authenticated POST through Celery AI processing to WebSocket broadcast and map update; (2) Health Agent Consultation Flow — showing LangGraph orchestrating multi-LLM failover and injecting real-time SymptoMap outbreak context into a clinical interview session; (3) Entity-Relationship Diagram covering all eight production database tables (users, hospitals, outbreaks, doctor_outbreaks, predictions, zones, alerts, aqi_signals) with column-level detail. Includes full API contract specifications for all major endpoints with request/response schemas.
+
+**[System Architecture — V1 Analysis and V2 Target Design](./docs/ARCHITECTURE.md)**
+
+A rigorous technical analysis comparing the current V1 implementation against the target V2 enterprise architecture. Identifies the four V1 bottlenecks: the 30-second polling anti-pattern generating 20,000 wasted requests per minute under load; the SQLite write-lock problem causing data loss under concurrent doctor submissions; monolithic read/write coupling causing dashboard reads to starve outbreak write paths; and absence of predictive intelligence reducing the system to a CRUD map. Documents the V2 architectural responses: CQRS with Kafka/Redis Streams event queues for zero-loss ingestion, WebSocket push replacing polling, PostGIS spatial indexing for millisecond geographic queries, ML microservice decoupling via Ray, and multi-tier Redis caching for geospatial tile re-use. Includes tech stack upgrade matrix and failure mode analysis with Kubernetes HPA scaling.
+
+---
+
+### Product Documents
+
+**[Business Requirements Document — BRD](./docs/BRD.md)**
+
+The complete product specification. Covers executive summary, problem statement, full user persona analysis (public health officers, doctors, administrators, individual patients), functional and non-functional requirements, user story specifications with acceptance criteria, competitive positioning matrix against Teladoc, ProMED, HealthMap, and CDC systems, business model, revenue projections (Year 1: $50K, Year 2: $500K, Year 3: $2M), partnership strategy, and the three-phase strategic roadmap.
+
+**[Doctor Station — BRD](./docs/DOCTOR_STATION_BRD.md)**
+
+The product specification for the Doctor Station portal specifically. Covers the secure authentication flow (shared station password plus JWT), the outbreak submission form design rationale for the 30-second submission target, alert creation workflow, submission history display, and the approval state machine. Includes UI/UX specifications and error handling requirements for all submission edge cases.
+
+**[API Specification](./docs/API_SPEC.md)**
+
+All public and authenticated API endpoint contracts. Covers authentication requirements, request/response schemas, HTTP status codes, and rate limiting behavior for every route across the outbreak, doctor, admin, stats, analytics, broadcast, prediction, and WebSocket namespaces. Includes the Swagger UI available at the live backend endpoint.
+
+**[Database Schema](./docs/DATABASE_SCHEMA.md)**
+
+Complete database schema documentation with entity definitions, column types, constraints, indexes, and foreign key relationships. Documents the dual-table design rationale — the ORM `outbreaks` table for structured incoming data and the `doctor_outbreaks` table holding the 200,000+ seeded bulk records — and explains the SQLAlchemy `deferred()` wrapper on Geography columns to prevent SQLite `AsEWKB`/`GeomFromEWKT` crashes while preserving PostGIS compatibility for production deployment.
+
+---
+
+### Operations Documents
+
+**[Doctor User Guide](./docs/DOCTOR_USER_GUIDE.md)**
+
+Step-by-step operational guide for healthcare providers using the Doctor Station portal. Covers login, outbreak submission workflow (disease type selection, severity classification, geographic location marking, patient count entry), alert creation, and submission history review.
+
+**[Deployment Guide](./docs/DEPLOYMENT_GUIDE.md)**
+
+Full production deployment instructions. Covers environment variable configuration, database migration steps, Redis setup, Celery worker launch, frontend build and Vercel deployment, ASGI server setup with Gunicorn plus Uvicorn workers, CORS configuration for production domains, and HTTPS termination. Covers both the Vercel-hosted frontend path and the self-hosted backend path.
+
+---
+
+### Legal
+
+**[Proprietary Notice](./docs/PROPRIETARY_NOTICE.md)**
+
+Intellectual property terms, restrictions on reproduction and commercial use, and contact information for licensing and partnership inquiries.
+
+---
+
 
 ## ⚙️ Setup & Running
 
