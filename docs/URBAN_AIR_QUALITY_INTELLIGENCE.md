@@ -1,4 +1,4 @@
-# AeroIntel: AI-Powered Urban Air Quality, Viral Fever Prediction & Public Health Chatbot
+# SymptoMap - AeroIntel: AI-Powered Urban Air Quality, Viral Fever Prediction & Public Health Chatbot
 
 *A comprehensive, production-ready platform designed for the Smart City Intervention Challenge.*
 
