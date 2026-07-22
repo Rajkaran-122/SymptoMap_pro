@@ -10,7 +10,7 @@ This architecture is built for extreme scalability and real-time responsiveness,
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#111111', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#ffffff', 'lineColor': '#ffffff', 'secondaryColor': '#222222', 'tertiaryColor': '#000000', 'mainBkg': '#000000', 'textColor': '#ffffff', 'fontFamily': 'monospace'}}}%%
 graph TD
     %% Sensors & External Data
-    subgraph Data Sources
+    subgraph DataSources [Data Sources]
         IoT["IoT CAAQMS Sensors"]
         Sat["Sentinel/MODIS Satellites"]
         Met["Meteorological APIs"]
@@ -21,13 +21,13 @@ graph TD
     Ingest["FastAPI Ingestion Gateway"]
     
     %% Data Layer
-    subgraph Persistence & Caching
+    subgraph PersistenceAndCaching [Persistence & Caching]
         DB[("PostgreSQL + PostGIS")]
         Cache[("Redis (Pub/Sub & Queues)")]
     end
     
     %% AI Agent Layer (Celery Workers)
-    subgraph Multi-Agent AI Core [Celery + LLM Orchestration]
+    subgraph MultiAgentAICore [Celery + LLM Orchestration]
         Attr["Source Attribution Agent"]
         Forecast["AQI Forecasting Agent"]
         Zoning["Epidemiological Zoning Agent"]
@@ -35,7 +35,7 @@ graph TD
     end
     
     %% Frontend / Consumers
-    subgraph Presentation & Action
+    subgraph PresentationAndAction [Presentation & Action]
         CmdCenter["Govt Command Center (React/MapLibre)"]
         Citizens["Citizen Alert System (SMS/Push/WebSockets)"]
     end
@@ -49,14 +49,14 @@ graph TD
     Ingest -->|Writes| DB
     Ingest -->|Dispatches Tasks| Cache
     
-    Cache -->|Consumes| Multi-Agent AI Core
+    Cache -->|Consumes| MultiAgentAICore
     
     Attr -->|Updates| DB
     Forecast -->|Updates| DB
     Zoning -->|Updates| DB
     Enforce -->|Updates| DB
     
-    Multi-Agent AI Core -->|Publishes Events| Cache
+    MultiAgentAICore -->|Publishes Events| Cache
     
     DB -->|REST API| CmdCenter
     Cache -->|WebSockets| CmdCenter

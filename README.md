@@ -30,6 +30,26 @@ To evaluate this project, please review the core architectural and proposal docu
 
 ---
 
+## Associated Public Health Ecosystem: AI Health Chatbot
+
+While AeroIntel handles population-level surveillance, our ecosystem extends to individual patient care through our dedicated AI Health Chatbot (Healthzy).
+
+**Repository**: [Health_agent.git](https://github.com/Rajkaran-122/Health_agent.git)
+
+### What the AI Health Chatbot Does
+The chatbot operates as a highly advanced **Adaptive Clinical Reasoning Engine**. Unlike standard chatbots, it executes a structured, dynamic medical triage flowchart:
+1. **Context Building**: Collects primary symptoms, age, gender, and onset timeline.
+2. **Intelligent Triage**: The AI generates specific, relevant questions with examples (e.g., pinpointing exact pain locations or sensations).
+3. **Real-Time SOAP Generation**: Subjective, Objective, Assessment, and Plan (SOAP) findings are updated in real-time in the background as the conversation progresses.
+4. **Transparent Clinical Reasoning**: The AI is engineered to provide the reasoning behind every response and question it generates.
+5. **Comprehensive History Taking**: It systematically drills down into:
+   - Factors that make symptoms better or worse.
+   - Historical instances of similar symptoms.
+   - Current medications, supplements, and allergies.
+6. **Diagnostic Output**: Once sufficient clinical context is gathered, it generates a full Consultation Summary, Diagnostic Report, and clear next steps for the patient.
+
+---
+
 ## Quick Start (Local Deployment)
 
 AeroIntel is built for rapid, instant bootstrapping for any Tier 1 or Tier 2 city.
