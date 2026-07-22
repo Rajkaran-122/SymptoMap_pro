@@ -76,7 +76,7 @@ async def get_pending_requests(
                 city=o.city,
                 state=o.state,
                 description=o.description,
-                date_reported=o.date_reported.isoformat() if o.date_reported else None,
+                date_reported=o.date_reported.isoformat() if hasattr(o.date_reported, 'isoformat') else str(o.date_reported) if o.date_reported else None,
                 submitted_by=o.submitted_by,
                 status=o.status
             ))
@@ -220,9 +220,9 @@ async def get_all_requests(
                 "location_name": row.location_name,
                 "city": row.city,
                 "state": row.state,
-                "date_reported": row.date_reported.isoformat() if row.date_reported else None,
+                "date_reported": row.date_reported.isoformat() if hasattr(row.date_reported, 'isoformat') else str(row.date_reported) if row.date_reported else None,
                 "status": row.status,
-                "created_at": row.created_at.isoformat() if row.created_at else None
+                "created_at": row.created_at.isoformat() if hasattr(row.created_at, 'isoformat') else str(row.created_at) if row.created_at else None
             })
         
         return {

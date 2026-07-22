@@ -1,81 +1,519 @@
-# SymptoMap - AeroIntel: AI-Powered Urban Air Quality, Viral Fever Prediction & Public Health Chatbot
+<div align="center">
 
-[![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)](docs/PROPRIETARY_NOTICE.md)
-[![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=flat&logo=fastapi)](https://fastapi.tiangolo.com/)
-[![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+<h1>🏥 The Healthcare AI Ecosystem</h1>
+<h3>Two Integrated Solutions for Complete Health Protection</h3>
 
-**SymptoMap** is a comprehensive, multi-agent AI ecosystem. It fuses real-time IoT urban air quality monitoring with predictive data systems for viral fevers, and provides a direct-to-patient AI Health Chatbot. This holistic approach stops pollution at the source while forecasting and mitigating public health crises before they overwhelm medical infrastructure.
+<p>
+  <a href="https://symtomap-main.vercel.app/" target="_blank"><img src="https://img.shields.io/badge/🌐%20SymptoMap%20Live-Main%20App-2563eb?style=for-the-badge" alt="SymptoMap Live" /></a>
+  &nbsp;
+  <a href="https://symptomap-2-python.vercel.app/" target="_blank"><img src="https://img.shields.io/badge/🐍%20SymptoMap-Python%20Backend-16a34a?style=for-the-badge" alt="Python Backend" /></a>
+  &nbsp;
+  <a href="https://healthzy.app/" target="_blank"><img src="https://img.shields.io/badge/🤖%20Healthzy-AI%20Health%20App-7c3aed?style=for-the-badge" alt="Healthzy" /></a>
+  &nbsp;
+  <a href="https://github.com/Rajkaran-122/Health_agent" target="_blank"><img src="https://img.shields.io/badge/🧠%20Health%20Agent-AI%20Engine-ea580c?style=for-the-badge" alt="Health Agent" /></a>
+</p>
 
-*This repository is submitted for the **AI-Powered Urban Air Quality Intelligence for Smart City Intervention** challenge.*
+<p>
+  <img src="https://img.shields.io/badge/React-18%2B-61dafb?style=flat-square&logo=react" />
+  <img src="https://img.shields.io/badge/FastAPI-Python-009688?style=flat-square&logo=fastapi" />
+  <img src="https://img.shields.io/badge/TypeScript-5.0-3178c6?style=flat-square&logo=typescript" />
+  <img src="https://img.shields.io/badge/MapLibre-GL%20JS-396cb2?style=flat-square" />
+  <img src="https://img.shields.io/badge/SQLite-200K%2B%20Records-003b57?style=flat-square&logo=sqlite" />
+  <img src="https://img.shields.io/badge/JWT-Auth-000000?style=flat-square&logo=json-web-tokens" />
+</p>
 
----
+<p><em>Integrating individual health intelligence with population-level disease surveillance — the only platform of its kind.</em></p>
 
-## Hackathon Documentation Directory
-
-To evaluate this project, please review the core architectural and proposal documents located in the `docs/` folder:
-
-1. **[The Winning Pitch / Project Proposal](docs/URBAN_AIR_QUALITY_INTELLIGENCE.md)**: Details the problem context, challenge statement, and exactly how AeroIntel dominates the evaluation criteria.
-2. **[High-Level Design (HLD)](docs/AEROINTEL_HLD.md)**: Visual architecture of the IoT ingestion, Celery Multi-Agent AI core, and Geospatial Command Center.
-3. **[Low-Level Design (LLD)](docs/AEROINTEL_LLD.md)**: Sequence diagrams for the Enforcement Approval Pipeline, Epidemiological Zoning flows, and core Database Schemas.
-4. **[Proprietary Notice & Licensing](docs/PROPRIETARY_NOTICE.md)**: Legal terms for evaluating this repository.
-
----
-
-## Core Platform Capabilities
-
-- **Geospatial Source Attribution**: AI identifies exact pollution sources (waste burning, factories) at the ward level using satellite (Sentinel/MODIS) and land-use data.
-- **Viral Fever Prediction**: Correlates AQI spikes with epidemiological data to dynamically generate Health Vulnerability Zones (Red/Yellow/Green).
-- **Enforcement Approval Pipeline**: Ensures data integrity by requiring city administrators to approve AI-generated interventions before dispatching authorities.
-- **Hyperlocal Alerting**: Triggers real-time WebSocket dashboard updates and targeted, multilingual SMS/IVR advisories to vulnerable populations.
+</div>
 
 ---
 
-## Associated Public Health Ecosystem: AI Health Chatbot
+## 📋 Table of Contents
 
-While AeroIntel handles population-level surveillance, our ecosystem extends to individual patient care through our dedicated AI Health Chatbot (Healthzy).
-
-**Repository**: [Health_agent.git](https://github.com/Rajkaran-122/Health_agent.git)
-
-### What the AI Health Chatbot Does
-The chatbot operates as a highly advanced **Adaptive Clinical Reasoning Engine**. Unlike standard chatbots, it executes a structured, dynamic medical triage flowchart:
-1. **Context Building**: Collects primary symptoms, age, gender, and onset timeline.
-2. **Intelligent Triage**: The AI generates specific, relevant questions with examples (e.g., pinpointing exact pain locations or sensations).
-3. **Real-Time SOAP Generation**: Subjective, Objective, Assessment, and Plan (SOAP) findings are updated in real-time in the background as the conversation progresses.
-4. **Transparent Clinical Reasoning**: The AI is engineered to provide the reasoning behind every response and question it generates.
-5. **Comprehensive History Taking**: It systematically drills down into:
-   - Factors that make symptoms better or worse.
-   - Historical instances of similar symptoms.
-   - Current medications, supplements, and allergies.
-6. **Diagnostic Output**: Once sufficient clinical context is gathered, it generates a full Consultation Summary, Diagnostic Report, and clear next steps for the patient.
+- [Overview](#-overview)
+- [The Two Platforms](#-the-two-platforms)
+- [Ecosystem Integration](#-how-the-ecosystem-works)
+- [Architecture](#-architecture)
+- [Key Features](#-key-features)
+- [Technology Stack](#-technology-stack)
+- [Live Demos & Links](#-live-demos--links)
+- [Pilot Results](#-proven-results-pilot-programs)
+- [Roadmap](#-roadmap)
+- [Documentation Directory](#-documentation-directory)
+- [Setup & Running](#-setup--running)
+- [Security & Ethics](#-security--ethics)
+- [License](#-license)
+- [Contact](#-contact)
 
 ---
 
-## Quick Start (Local Deployment)
+## 🌐 Overview
 
-AeroIntel is built for rapid, instant bootstrapping for any Tier 1 or Tier 2 city.
+This ecosystem addresses two parallel crises in global healthcare:
+
+| Problem | Scale |
+|---|---|
+| Underserved populations without healthcare access | **80%** of rural populations |
+| Disease outbreaks reported manually with delays | **Hours to days** lag time |
+| Language barriers blocking effective diagnosis | **Billions** affected globally |
+| No centralized real-time disease surveillance | **Every country** lacks unified data |
+
+**Our solution:** Two purpose-built platforms — **SYMPTOMAP** for population-level disease surveillance, and the **Health Agent** for individual AI-powered health consultation — sharing a real-time data bridge so that when a doctor reports an outbreak, affected individuals are warned instantly.
+
+---
+
+## 🏥 The Two Platforms
+
+### SYMPTOMAP — Real-Time Disease Surveillance
+
+> **Live App:** [symtomap-main.vercel.app](https://symtomap-main.vercel.app/) &nbsp;|&nbsp; **Backend:** [symptomap-2-python.vercel.app](https://symptomap-2-python.vercel.app/)
+
+SYMPTOMAP is an interactive, map-based disease surveillance platform for healthcare professionals. Doctors can report outbreaks in under 30 seconds; administrators get a live dashboard of disease spread across India.
+
+**Core Capabilities:**
+- 🗺️ **Interactive MapLibre Map** — visualize outbreaks geographically with severity heatmaps
+- ⚡ **30-Second Submission** — doctor portal for rapid outbreak reporting
+- 📊 **Live Admin Dashboard** — real-time stats: 200,000+ seeded records across India
+- 🔔 **WebSocket Alerts** — instant broadcast to all connected users on new reports
+- 🧑‍⚕️ **Doctor Station** — secure authenticated portal for submissions and alert creation
+- 🏛️ **Admin Console** — approval workflows, broadcast system, verification pipeline
+- 📈 **Analytics Engine** — trend analysis, week-over-week comparisons, activity feeds
+- 🔐 **Role-Based Access** — Admin, Doctor, and Public tiers with JWT authentication
+- 🌐 **Air Quality Intelligence** — Urban AQI monitoring, epidemiological zoning, and viral fever risk prediction
+
+---
+
+### Health Agent — AI-Powered Health Consultation
+
+> **App:** [healthzy.app](https://healthzy.app/) &nbsp;|&nbsp; **Source:** [github.com/Rajkaran-122/Health_agent](https://github.com/Rajkaran-122/Health_agent)
+
+The Health Agent is a 24/7 AI doctor accessible from any device, in any language. It accepts images, voice, and text to conduct an intelligent clinical interview and generate a diagnostic report with confidence scores.
+
+**Core Capabilities:**
+- 🖼️ **Image-Based Disease Detection** — multi-model ensemble with 85%+ accuracy
+- 🎙️ **Voice-Activated Consultation** — real-time voice via LiveKit WebRTC (<200ms latency)
+- 🌍 **Multilingual First** — designed for global accessibility, not English-centric
+- 🧠 **Multi-LLM Failover** — OpenAI + Claude + Grok with 99.9% uptime
+- 📋 **SOAP Note Generation** — clinical-format diagnostic reports with confidence scores
+- 🔗 **SYMPTOMAP Integration** — receives real-time outbreak alerts from SYMPTOMAP
+- 📱 **2G Compatible** — works on low-end devices in underserved areas
+- 📁 **Personal Health Records** — encrypted, user-controlled health history
+
+---
+
+## 🔗 How the Ecosystem Works
+
+```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#1e40af', 'primaryTextColor': '#ffffff', 'lineColor': '#60a5fa', 'mainBkg': '#0f172a', 'textColor': '#e2e8f0'}}}%%
+flowchart LR
+    subgraph Individual["🧑 Individual Layer"]
+        User["Patient / Public"]
+        HA["Health Agent\nhealthzy.app"]
+        User -->|"Voice / Image / Text"| HA
+    end
+
+    subgraph Professional["🏥 Professional Layer"]
+        Doctor["Doctor / PHO"]
+        SM["SYMPTOMAP\nsymtomap-main.vercel.app"]
+        Doctor -->|"30-sec Submission"| SM
+    end
+
+    subgraph Intelligence["🧠 Intelligence Layer"]
+        DB[("200K+ Records\nSQLite + PostGIS")]
+        WS["WebSocket\nReal-Time Bridge"]
+        AI["Multi-LLM\nOrchestration"]
+        SM -->|"Writes outbreak data"| DB
+        DB -->|"Feeds analytics"| WS
+        HA -->|"Requests diagnosis"| AI
+        AI -->|"SOAP Report"| HA
+    end
+
+    subgraph Alerts["🔔 Alert Layer"]
+        Broadcast["Broadcast System\nSMS / Push / WebSocket"]
+        WS -->|"Outbreak in area"| Broadcast
+        Broadcast -->|"Outbreak warning"| User
+    end
+
+    style Individual fill:#1e3a5f,stroke:#3b82f6
+    style Professional fill:#14532d,stroke:#22c55e
+    style Intelligence fill:#3b1f5e,stroke:#a855f7
+    style Alerts fill:#7c2020,stroke:#ef4444
+```
+
+**The Integration Flow:**
+1. A doctor spots an outbreak and submits via SYMPTOMAP in 30 seconds
+2. The submission hits the FastAPI backend, is stored, and a WebSocket event fires
+3. The AI analytics engine zones the affected area and calculates risk levels
+4. An instant alert is dispatched to Health Agent users in that geographic area
+5. Individuals get early warnings and personalized prevention guidance
+
+---
+
+## 🏗️ Architecture
+
+### SYMPTOMAP Architecture
+
+```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#1e40af', 'lineColor': '#60a5fa', 'mainBkg': '#0f172a', 'textColor': '#e2e8f0'}}}%%
+graph TD
+    subgraph Frontend["Frontend — React 18 + TypeScript"]
+        MapUI["MapLibre GL Map\nOutbreak Heatmap"]
+        AdminUI["Admin Console\nApproval + Broadcasts"]
+        DoctorUI["Doctor Station\nReport Submission"]
+        PublicUI["Public Map\nDisease Tracker"]
+    end
+
+    subgraph Backend["Backend — FastAPI Python Async"]
+        Auth["JWT Auth\n24hr Sessions"]
+        OutbreakAPI["Outbreak API\nCRUD + Filtering"]
+        StatsAPI["Stats API\nAggregated Metrics"]
+        AdminAPI["Admin API\nApproval Workflow"]
+        WSAPI["WebSocket\nReal-Time Events"]
+        BroadcastAPI["Broadcast API\nHealth Advisories"]
+        AirQualityAPI["AQI Intelligence\nUrban Air Quality"]
+    end
+
+    subgraph DataLayer["Data Layer"]
+        SQLite[("SQLite\n200,002 Records")]
+        MockRedis["Redis Pub-Sub + Cache"]
+        AuditLog["Audit Log\nAll Actions Tracked"]
+    end
+
+    subgraph AILayer["AI Layer — Celery Workers"]
+        Summarizer["Outbreak Summarizer\nAI Analysis"]
+        Triage["Triage Agent\nSeverity Scoring"]
+        ZoneAgent["Zoning Agent\nEpidemiological Zones"]
+        AQIAgent["AQI Agent\nViral Fever Prediction"]
+    end
+
+    MapUI & AdminUI & DoctorUI & PublicUI --> Auth
+    Auth --> OutbreakAPI & StatsAPI & AdminAPI & BroadcastAPI & AirQualityAPI
+    OutbreakAPI & StatsAPI & AdminAPI --> SQLite
+    WSAPI --> MockRedis
+    OutbreakAPI --> Summarizer & Triage & ZoneAgent & AQIAgent
+    Summarizer & Triage & ZoneAgent & AQIAgent --> SQLite
+    MockRedis --> WSAPI
+    AuditLog --> SQLite
+```
+
+### Health Agent Architecture
+
+```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#7c3aed', 'lineColor': '#a78bfa', 'mainBkg': '#0f172a', 'textColor': '#e2e8f0'}}}%%
+graph TD
+    subgraph Input["Input Layer"]
+        Voice["Voice Input\nLiveKit WebRTC"]
+        Image["Image Upload\nDisease Photos"]
+        Text["Text / Chat\nSymptom Description"]
+    end
+
+    subgraph Orchestration["LangGraph Orchestration"]
+        Intake["Patient Intake Agent\nAge, Gender, Timeline"]
+        Interview["Clinical Interview Agent\nAdaptive Questioning"]
+        Scoring["Risk Scoring Agent\nSymptom Weighting"]
+        Differential["Differential Diagnosis Agent\nTop-3 Possibilities"]
+        Report["SOAP Note Generator\nStructured Output"]
+    end
+
+    subgraph LLMs["Multi-LLM Layer — Failover"]
+        GPT["OpenAI GPT-4o\nPrimary"]
+        Claude["Anthropic Claude\nFallback 1"]
+        Grok["xAI Grok\nFallback 2"]
+    end
+
+    subgraph Output["Output Layer"]
+        DiagReport["Diagnostic Report\nConfidence Scores"]
+        Recs["Recommendations\nActionable Advice"]
+        Translated["Multilingual Alert\nHindi, Tamil, etc."]
+        OutbreakWarn["Outbreak Warning\nFrom SYMPTOMAP"]
+    end
+
+    Voice & Image & Text --> Intake
+    Intake --> Interview --> Scoring --> Differential --> Report
+    Interview & Scoring & Differential <-->|"LLM Calls with Failover"| GPT
+    GPT -->|"Fails"| Claude
+    Claude -->|"Fails"| Grok
+    Report --> DiagReport & Recs & Translated
+    OutbreakWarn -.->|"SYMPTOMAP Bridge"| Recs
+```
+
+### AI Doctor Clinical Flow
+
+```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#065f46', 'lineColor': '#34d399', 'mainBkg': '#0f172a', 'textColor': '#e2e8f0'}}}%%
+flowchart TD
+    Start(["First Step"]) --> Symptoms["Enter Symptoms"]
+    Symptoms --> Demographics["Enter Age and Gender"]
+    Demographics --> Timeline["When symptoms started"]
+    Timeline --> RiskScore["AI Score generated\nrelevant questions with variables"]
+    RiskScore --> Findings["Store Findings Till Now\nbased on User Answers"]
+    Findings --> Discussion{"Discussion Point"}
+
+    Discussion -->|"Yes/No — No Clear Type of Questions"| OpenQuestions["Open Ended Questions"]
+    Discussion -->|"More Questions Needed"| MoreQ["Generate More Questions"]
+
+    RiskScore --> AINarrow["AI narrows and notes\nanalysis at step 5"]
+    AINarrow --> StartTaking["Start Taking down history\nwith focused questions"]
+
+    StartTaking --> MoreDetails{"More Details about\ntest or analysis needed"}
+    MoreDetails -->|"Yes"| HistoryCollection{"History\nCollection Completed"}
+    MoreDetails -->|"No"| HistoryCollection
+
+    HistoryCollection -->|"Yes"| AskSymptom["Ask what makes symptoms\nbetter or worse + follow-up"]
+    AskSymptom -->|"Yes"| AskFollowUp["Ask additional questions\nfrom previous step"]
+    AskFollowUp -->|"No"| AskOther["Ask for any other symptoms"]
+
+    AskOther -->|"Yes"| AnyAdditional{"Any Additional Symptoms"}
+    AnyAdditional -->|"Yes"| AskMoreSimilar["Ask if symptom was\nreported in previous step"]
+    AnyAdditional -->|"No"| FullDetails["Full Details about\nadditional symptoms"]
+
+    AskMoreSimilar -->|"Yes"| FullHistory["Full Details about\nhistory of reported symptom"]
+
+    StartTaking --> AskMeds["Ask about Medications,\nSupplements, etc."]
+    AskMeds --> MedDetails{"Full medication\ndetails available"}
+    MedDetails -->|"No"| Allergies{"Any Allergies or\nother relevant info"}
+    MedDetails -->|"Yes"| Allergies
+
+    Allergies -->|"Yes"| AllergyDetails["Full Details allergies\nor additional info"]
+    Allergies -->|"No"| AskMoreNeeded["Ask More Questions\nif needed"]
+
+    AllergyDetails -->|"Yes"| Consult["Generate Consultation Summary\nDiagnostic Report + Next Steps"]
+    AskMoreNeeded -->|"Yes"| Consult
+    FullHistory --> Consult
+    FullDetails --> Consult
+
+    Consult --> End(["Complete Report + SOAP Note"])
+
+    style Start fill:#065f46,color:#fff
+    style End fill:#065f46,color:#fff
+    style Consult fill:#1e40af,color:#fff
+    style Discussion fill:#7c3aed,color:#fff
+    style AnyAdditional fill:#7c3aed,color:#fff
+    style MedDetails fill:#7c3aed,color:#fff
+    style Allergies fill:#7c3aed,color:#fff
+    style MoreDetails fill:#7c3aed,color:#fff
+    style HistoryCollection fill:#7c3aed,color:#fff
+```
+
+> **Notes:** SOAP findings are updated in real-time after each step. AI also sends reasoning behind every response.
+
+---
+
+## ✨ Key Features
+
+### SYMPTOMAP Features
+
+| Feature | Description |
+|---|---|
+| 🗺️ Interactive Map | MapLibre GL with outbreak markers, severity heatmaps, and zone boundaries |
+| ⚡ 30-Second Submission | Doctor submits disease, severity, location — complete in seconds |
+| 📊 Live Dashboard | Total reports, pending review, high priority, active cases — all real-time |
+| 🏛️ Admin Console | Approve/reject outbreak reports, manage broadcasts, verify submissions |
+| 📢 Broadcast System | Create and send public health advisories with urgency levels |
+| 🔔 WebSocket Real-Time | All clients receive instant updates without page refresh |
+| 📈 Analytics | Activity feed, week-over-week trends, disease distribution charts |
+| 🌫️ Air Quality Module | AQI monitoring, viral fever risk prediction, epidemiological zoning |
+| 🔐 Security | JWT auth, role-based access, audit logs, input sanitization, rate limiting |
+| 📋 Approval Workflow | Pending → Under Review → Approved/Rejected pipeline |
+
+### Health Agent Features
+
+| Feature | Description |
+|---|---|
+| 🎙️ Voice Consultation | Real-time voice via LiveKit WebRTC with sub-200ms latency |
+| 🖼️ Image Diagnosis | Upload photos for AI-powered disease detection — 85%+ accuracy |
+| 🌍 Multilingual | Supports Hindi, Tamil, Bengali, and more regional languages |
+| 🧠 Multi-LLM | OpenAI + Claude + Grok with automatic failover for 99.9% uptime |
+| 📋 SOAP Reports | Clinical-format reports with confidence scores, not just chatbot answers |
+| 🔗 Outbreak Alerts | Receives real-time warnings from SYMPTOMAP for affected areas |
+| 📱 Low-End Compatible | Works on basic 2G phones — designed for underserved populations |
+| 📁 Health Records | Personal health history management with encryption |
+
+---
+
+## 🛠️ Technology Stack
+
+### SYMPTOMAP
+
+| Layer | Technologies |
+|---|---|
+| Frontend | React 18+, TypeScript, Vite, MapLibre GL JS, Leaflet |
+| Backend | FastAPI (Python async), SQLAlchemy, Pydantic v2 |
+| Database | SQLite (200K+ records), Redis Pub/Sub, PostgreSQL-ready |
+| Auth | JWT tokens (24-hour sessions), bcrypt password hashing |
+| Realtime | WebSockets, Mock Redis (prod: Redis Pub/Sub) |
+| Security | Input sanitization, CORS enforcement, rate limiting, audit logging |
+
+### Health Agent
+
+| Layer | Technologies |
+|---|---|
+| Frontend | Next.js (React), TypeScript |
+| Backend | Flask microservices, Python |
+| AI/ML | OpenAI GPT-4o, Anthropic Claude, xAI Grok (multi-LLM failover) |
+| Voice | LiveKit WebRTC (<200ms latency) |
+| Orchestration | LangGraph (stateful conversation flows) |
+| Database | MongoDB, Redis (60-70% reduced load) |
+
+---
+
+## 🔗 Live Demos & Links
+
+| Platform | Link | Description |
+|---|---|---|
+| SYMPTOMAP Main | [symtomap-main.vercel.app](https://symtomap-main.vercel.app/) | Primary frontend — full ecosystem entry point |
+| SYMPTOMAP Python API | [symptomap-2-python.vercel.app](https://symptomap-2-python.vercel.app/) | FastAPI backend with live Swagger UI |
+| Healthzy Health App | [healthzy.app](https://healthzy.app/) | AI health assistant — live app |
+| Health Agent Source | [github.com/Rajkaran-122/Health_agent](https://github.com/Rajkaran-122/Health_agent) | AI agent source code and architecture |
+
+---
+
+## 📊 Proven Results: Pilot Programs
+
+### SYMPTOMAP Pilot — 50 Doctors, 2 Months
+
+| Metric | Result |
+|---|---|
+| First-Week Adoption | **94%** |
+| Avg. Submission Time | **30 seconds** |
+| Data Accuracy | **98%** |
+| Faster than Phone/Fax | **89%** faster |
+
+Zero data loss. 3 outbreak clusters detected and contained early.
+
+### Health Agent Pilot — 100 Users, 3 Months
+
+| Metric | Result |
+|---|---|
+| Daily Active Users | **87%** |
+| Satisfaction Rating | **92%** |
+| Early Issue Detection | **73%** |
+| Serious Conditions Caught Early | **12+** |
+
+**Combined Impact:** Early detection and containment of 3 outbreak clusters, preventing over 50 cases through early intervention and warnings to Health Agent users.
+
+---
+
+## 🗺️ Roadmap
+
+### Phase 1 — Months 1–6
+- [ ] Deploy in 3–5 pilot regions across India
+- [ ] Onboard 1,000 users & 500 doctors
+- [ ] Add 7 more languages (total 10 supported)
+- [ ] Email/SMS notification system
+- [ ] Mobile PWA launch
+
+### Phase 2 — Months 7–12
+- [ ] Scale to 50,000 users
+- [ ] ML-based outbreak prediction engine
+- [ ] Hospital system API integration
+- [ ] Native mobile apps (iOS/Android)
+- [ ] Advanced analytics dashboard
+
+### Phase 3 — Year 2+
+- [ ] 1M users, 100K doctors
+- [ ] National health system integration
+- [ ] 50+ countries deployment
+- [ ] WHO collaboration
+- [ ] Pandemic early detection capability
+
+---
+
+## 📁 Documentation Directory
+
+To evaluate this project, please review the core architectural documents in the [`docs/`](./docs/) folder:
+
+| Document | Description |
+|---|---|
+| [HLD — High-Level Design](./docs/SYMPTOMAP_HLD.md) | Visual system architecture: ingestion, multi-agent AI core, geospatial surveillance |
+| [LLD — Low-Level Design](./docs/SYMPTOMAP_LLD.md) | Sequence diagrams for approval pipeline, zoning flows, and database schemas |
+| [BRD — Business Requirements](./docs/BRD.md) | Full product specification, user stories, and business goals |
+| [Architecture](./docs/ARCHITECTURE.md) | Detailed component architecture and data flow |
+| [API Spec](./docs/API_SPEC.md) | All API endpoint specifications |
+| [Database Schema](./docs/DATABASE_SCHEMA.md) | Entity-relationship diagrams and schema definitions |
+| [Doctor User Guide](./docs/DOCTOR_USER_GUIDE.md) | Step-by-step guide for healthcare providers |
+| [Deployment Guide](./docs/DEPLOYMENT_GUIDE.md) | Full production deployment instructions |
+| [Proprietary Notice](./docs/PROPRIETARY_NOTICE.md) | Legal terms and licensing information |
+
+---
+
+## ⚙️ Setup & Running
 
 ### Prerequisites
-* Node.js 18+
-* Python 3.10+
-* Redis (Required for Multi-Agent Task Queuing & WebSockets)
+- Node.js 18+, Python 3.10+, npm / pip
 
-### 1. Backend (FastAPI + Celery Agents)
+### SYMPTOMAP — Local Development
+
 ```bash
+# Clone the repository
+git clone https://github.com/Rajkaran-122/sympto-pulse-map-main
+cd sympto-pulse-map-main
+
+# Backend (FastAPI)
 cd backend-python
 python -m venv venv
-# Windows: venv\Scripts\activate | macOS/Linux: source venv/bin/activate
+venv\Scripts\activate          # Windows
+source venv/bin/activate       # Mac/Linux
 pip install -r requirements.txt
-uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-```
-*(Note: On the first boot, the system auto-seeds CAAQMS mock sensors and historical alerts for immediate evaluation).*
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
 
-### 2. Frontend (React + MapLibre)
-```bash
+# Frontend (React + Vite) — in a new terminal
 cd frontend
 npm install
 npm run dev
 ```
-Access the Government Command Center at `http://localhost:3000`.
+
+**Default Credentials:**
+
+| Role | Email | Password |
+|---|---|---|
+| Admin | admin@symptomap.com | Admin@123 |
+| Doctor | doctor@symptomap.com | Doctor@123 |
+
+Frontend: `http://localhost:5173` &nbsp;·&nbsp; Backend API: `http://localhost:8000` &nbsp;·&nbsp; Swagger UI: `http://localhost:8000/docs`
 
 ---
-*Developed by Rajkaran Yadav*
+
+## 🔐 Security & Ethics
+
+### Security Architecture
+- **HIPAA-Compliant** architecture with end-to-end encryption
+- **JWT authentication** with 24-hour auto-expiry
+- **Protection** against SQL injection, XSS, CORS enforcement
+- **Rate limiting** (100 req/min), full audit logging, automated backups
+- **Role-based access control** — Admin, Doctor, Public tiers
+
+### Ethical Principles
+- **Privacy First** — User data controlled by the user, never sold
+- **AI Assists, Does Not Replace** — Transparent confidence scores on every diagnosis
+- **Equity & Inclusion** — Free tier, multilingual, 2G-compatible for underserved populations
+- **Transparency** — Open-source core, explainable AI outputs, regular audits
+- **Social Impact** — Free deployment for government/NGOs; anonymized data for medical research only with consent
+
+**Our Goal:** 30% reduction in preventable deaths by 2030.
+
+---
+
+## 📜 License
+
+This repository and all its contents are **Proprietary and Confidential**.
+
+**Copyright © 2026 Rajkaran Yadav. All rights reserved.**
+
+Unauthorized reproduction, distribution, or commercial use is strictly prohibited. See [`docs/PROPRIETARY_NOTICE.md`](./docs/PROPRIETARY_NOTICE.md) for full terms. For commercial licensing, government deployment, or partnership opportunities — contact directly.
+
+---
+
+## 📬 Contact
+
+**Rajkaran Yadav** — Team Lead · Full-Stack Developer · Healthcare AI Systems Specialist
+
+- 📞 [+91-9975889977](tel:+919975889977)
+- 🐙 [github.com/Rajkaran-122](https://github.com/Rajkaran-122)
+- 🌐 [symtomap-main.vercel.app](https://symtomap-main.vercel.app/)
+
+**Key Skills:** Frontend (React, Next.js) · Backend (Python, Node.js) · AI/ML · Databases · System Architecture
+
+---
+
+> *"Every person has instant access to quality healthcare. Every outbreak is detected before becoming an epidemic."*

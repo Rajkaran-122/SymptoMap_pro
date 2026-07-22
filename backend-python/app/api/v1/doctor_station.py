@@ -53,7 +53,7 @@ class AlertSubmission(BaseModel):
     @field_validator('title', 'message', 'affected_area')
     @classmethod
     def sanitize_text(cls, v: str) -> str:
-        return sanitize_html(v)
+        return sanitize_html(v) or ""
 
 
 
@@ -163,9 +163,11 @@ async def submit_outbreak(
         
         outbreak_id = new_outbreak.id
         
-        # Trigger Celery Summarizer Agent
-        from app.agents.summarizer import summarize_outbreak_task
-        summarize_outbreak_task.delay(outbreak_id)
+        try:
+            from app.agents.summarizer import summarize_outbreak_task
+            summarize_outbreak_task.delay(outbreak_id)
+        except Exception as celery_err:
+            print(f"⚠️ Celery dispatch failed (Redis might not be running): {celery_err}")
         
         # BROADCAST TO ALL CONNECTED CLIENTS (non-blocking)
         try:
@@ -195,7 +197,7 @@ async def submit_outbreak(
         log_audit_event(
             event="OUTBREAK_SUBMITTED",
             actor_id=str(current_user.id),
-            actor_role=current_user.role,
+            actor_role=str(current_user.role),
             ip_address=request.client.host if request.client else "unknown",
             status="SUCCESS",
             metadata={"outbreak_id": outbreak_id, "disease": outbreak.disease_type, "severity": outbreak.severity}
@@ -283,9 +285,11 @@ async def submit_alert(
             print(f"⚠️ Failed to sync alert to main table: {sync_err}")
             print(traceback.format_exc())
 
-        # Trigger Celery Triage Agent
-        from app.agents.triage import triage_alert_task
-        triage_alert_task.delay(alert_id)
+        try:
+            from app.agents.triage import triage_alert_task
+            triage_alert_task.delay(alert_id)
+        except Exception as celery_err:
+            print(f"⚠️ Celery dispatch failed (Redis might not be running): {celery_err}")
 
         # BROADCAST TO ALL CONNECTED CLIENTS (non-blocking)
         try:
@@ -312,7 +316,7 @@ async def submit_alert(
         log_audit_event(
             event="ALERT_SUBMITTED",
             actor_id=str(current_user.id),
-            actor_role=current_user.role,
+            actor_role=str(current_user.role),
             ip_address=request.client.host if request.client else "unknown",
             status="SUCCESS",
             metadata={"alert_id": alert_id, "type": alert.alert_type, "title": alert.title}

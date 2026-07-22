@@ -467,6 +467,12 @@ export const OutbreakMap: React.FC<OutbreakMapProps> = ({ onOutbreakClick = () =
   const severeCount = outbreaks.filter(o => o.severity === 'severe').length;
   const moderateCount = outbreaks.filter(o => o.severity === 'moderate').length;
   const mildCount = outbreaks.filter(o => o.severity === 'mild').length;
+  
+  // Calculate total unique zones
+  const uniqueZones = new Set(outbreaks.map(o => {
+    const loc = o.hospital?.location || o.location || {};
+    return loc.city || o.city || o.location_name || 'Unknown Zone';
+  })).size;
 
   return (
     <div className="relative w-full h-full">
@@ -549,7 +555,7 @@ export const OutbreakMap: React.FC<OutbreakMapProps> = ({ onOutbreakClick = () =
         <div className="mt-2 pt-2 border-t border-gray-200">
           <div className="text-[10px] text-gray-500 flex justify-between items-center">
             <span>Total Zones:</span>
-            <span className="font-bold text-gray-700">{outbreaks.length}</span>
+            <span className="font-bold text-gray-700">{uniqueZones}</span>
           </div>
         </div>
       </div>

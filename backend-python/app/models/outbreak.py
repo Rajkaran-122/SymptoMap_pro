@@ -4,6 +4,7 @@ Outbreak database models
 
 from sqlalchemy import Column, String, Integer, Boolean, DateTime, ForeignKey, Text, Float
 from sqlalchemy.sql import func
+from sqlalchemy.orm import deferred
 import uuid
 
 from app.core.database import Base
@@ -21,7 +22,7 @@ class Hospital(Base):
     # Location storage - using lat/lng for simplicity
     latitude = Column(Float)
     longitude = Column(Float)
-    location = Column(Geography(geometry_type='POINT', srid=4326), nullable=True)  # Optional for compatibility
+    location = deferred(Column(String, nullable=True))  # Optional for compatibility
     
     city = Column(String(100))
     state = Column(String(100))
@@ -65,7 +66,7 @@ class Outbreak(Base):
     # Location storage - using lat/lng for simplicity
     latitude = Column(Float)
     longitude = Column(Float)
-    location = Column(Geography(geometry_type='POINT', srid=4326), nullable=True)  # Optional for compatibility
+    location = deferred(Column(String, nullable=True))  # Optional for compatibility
     
     verified = Column(Boolean, default=False)
     verified_by = Column(UUID(as_uuid=True), ForeignKey("users.id"))
@@ -85,7 +86,7 @@ class Prediction(Base):
     disease_type = Column(String(100), index=True)
     reference_outbreak_id = Column(UUID(as_uuid=True), ForeignKey("outbreaks.id"))
     
-    location = Column(Geography(geometry_type='POINT', srid=4326))
+    location = deferred(Column(String))
     zone_name = Column(String(255))
     
     prediction_date = Column(DateTime(timezone=True), nullable=False, index=True)
@@ -120,7 +121,7 @@ class Alert(Base):
     title = Column(String(255), nullable=False)
     message = Column(Text, nullable=False)
     
-    location = Column(Geography(geometry_type='POINT', srid=4326))
+    location = deferred(Column(String))
     zone_name = Column(String(255))
     
     recipients = Column(JSONB, nullable=False)  # [user_ids]

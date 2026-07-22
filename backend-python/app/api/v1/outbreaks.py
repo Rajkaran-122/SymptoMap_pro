@@ -61,8 +61,11 @@ async def create_outbreak(
         # CASE 1: Manual Entry (Admin/PHO providing hospital details directly)
         if outbreak_data.hospital_name and outbreak_data.location:
             # Check if hospital exists by name (simple check)
+            from sqlalchemy.orm import defer
             result = await db.execute(
-                select(Hospital).where(Hospital.name == outbreak_data.hospital_name)
+                select(Hospital)
+                .where(Hospital.name == outbreak_data.hospital_name)
+                .options(defer(Hospital.location))
             )
             hospital = result.scalar_one_or_none()
             
@@ -81,7 +84,6 @@ async def create_outbreak(
                     address="Manual Entry",
                     latitude=lat,
                     longitude=lng,
-                    location=f"POINT({lng} {lat})",  # Store as WKT string
                     city=city,
                     state=state,
                     hospital_type="Manual Entry"
@@ -104,13 +106,12 @@ async def create_outbreak(
              lat_val = outbreak_data.location.get("lat") or outbreak_data.location.get("latitude") or 0
              lng_val = outbreak_data.location.get("lng") or outbreak_data.location.get("longitude") or 0
         else:
-             lat_val = hospital.latitude or 0
-             lng_val = hospital.longitude or 0
+             lat_val = hospital.latitude if hospital.latitude is not None else 0
+             lng_val = hospital.longitude if hospital.longitude is not None else 0
              
-        lat = float(lat_val)
-        lng = float(lng_val)
+        lat = float(str(lat_val)) if lat_val else 0.0
+        lng = float(str(lng_val)) if lng_val else 0.0
         
-        # Create outbreak
         outbreak = Outbreak(
             hospital_id=hospital.id,
             reported_by=None,  # Allow null for testing
@@ -124,7 +125,6 @@ async def create_outbreak(
             notes=outbreak_data.notes,
             latitude=lat,
             longitude=lng,
-            location=f"POINT({lng} {lat})",  # Store as WKT string
             verified=True  # Auto-verify for testing
         )
         
@@ -234,7 +234,7 @@ async def _get_outbreaks(
         orm_filters.append(Outbreak.verified == verified)
     if days:
         cutoff = datetime.now(timezone.utc) - timedelta(days=days)
-        if "sqlite" in str(db.bind.url):
+        if "sqlite" in str(getattr(db.bind, "url", "")):
             cutoff = cutoff.replace(tzinfo=None)
         orm_filters.append(Outbreak.date_reported >= cutoff)
 
@@ -304,7 +304,7 @@ async def _get_outbreaks(
         doc_filters.append(DoctorOutbreak.severity == severity)
     if days:
         cutoff = datetime.now(timezone.utc) - timedelta(days=days)
-        if "sqlite" in str(db.bind.url):
+        if "sqlite" in str(getattr(db.bind, "url", "")):
             cutoff = cutoff.replace(tzinfo=None)
         doc_filters.append(DoctorOutbreak.date_reported >= cutoff)
 
@@ -383,33 +383,26 @@ async def get_pending_outbreak_count(
 async def get_outbreak_stats(
     db: AsyncSession = Depends(get_db)
 ):
-    """Get aggregated outbreak statistics for Admin Dashboard"""
-    
-    # 1. Total Reports
-    total_query = select(func.count(Outbreak.id))
-    total_result = await db.execute(total_query)
-    total_reports = total_result.scalar() or 0
-    
-    # 2. Pending Review (Not Verified)
-    pending_query = select(func.count(Outbreak.id)).where(Outbreak.verified == False)
-    pending_result = await db.execute(pending_query)
-    pending_review = pending_result.scalar() or 0
-    
-    # 3. High Priority (Severe)
-    severe_query = select(func.count(Outbreak.id)).where(Outbreak.severity == 'severe')
-    severe_result = await db.execute(severe_query)
-    high_priority = severe_result.scalar() or 0
-    
-    # 4. Active Cases (Sum of patients)
-    cases_query = select(func.sum(Outbreak.patient_count))
-    cases_result = await db.execute(cases_query)
-    active_cases = cases_result.scalar() or 0
-    
+    """Get aggregated outbreak statistics for Admin Dashboard - combines ORM + doctor_outbreaks"""
+    from app.models.doctor import DoctorOutbreak
+
+    # --- ORM Outbreaks table ---
+    orm_total = (await db.execute(select(func.count(Outbreak.id)))).scalar() or 0
+    orm_pending = (await db.execute(select(func.count(Outbreak.id)).where(Outbreak.verified == False))).scalar() or 0
+    orm_severe = (await db.execute(select(func.count(Outbreak.id)).where(Outbreak.severity == 'severe'))).scalar() or 0
+    orm_cases = (await db.execute(select(func.sum(Outbreak.patient_count)))).scalar() or 0
+
+    # --- Doctor Outbreaks table (bulk seeded data) ---
+    doc_total = (await db.execute(select(func.count(DoctorOutbreak.id)))).scalar() or 0
+    doc_pending = (await db.execute(select(func.count(DoctorOutbreak.id)).where(DoctorOutbreak.status == 'pending'))).scalar() or 0
+    doc_severe = (await db.execute(select(func.count(DoctorOutbreak.id)).where(DoctorOutbreak.severity == 'severe'))).scalar() or 0
+    doc_cases = (await db.execute(select(func.sum(DoctorOutbreak.patient_count)))).scalar() or 0
+
     return {
-        "total_reports": total_reports,
-        "pending_review": pending_review,
-        "high_priority": high_priority,
-        "active_cases": active_cases
+        "total_reports": orm_total + doc_total,
+        "pending_review": orm_pending + doc_pending,
+        "high_priority": orm_severe + doc_severe,
+        "active_cases": orm_cases + doc_cases
     }
 
 
@@ -420,10 +413,12 @@ async def get_outbreak(
 ):
     """Get detailed outbreak information"""
     
+    from sqlalchemy.orm import defer
     result = await db.execute(
         select(Outbreak, Hospital).join(
             Hospital, Outbreak.hospital_id == Hospital.id
         ).where(Outbreak.id == outbreak_id)
+        .options(defer(Outbreak.location), defer(Hospital.location))
     )
     row = result.first()
     
@@ -476,8 +471,9 @@ async def verify_outbreak(
             detail="Only admins can verify outbreaks"
         )
     
+    from sqlalchemy.orm import defer
     result = await db.execute(
-        select(Outbreak).where(Outbreak.id == outbreak_id)
+        select(Outbreak).where(Outbreak.id == outbreak_id).options(defer(Outbreak.location))
     )
     outbreak = result.scalar_one_or_none()
     
@@ -513,8 +509,9 @@ async def verify_outbreak_public(
     except ValueError:
         raise HTTPException(status_code=400, detail="Invalid outbreak ID format")
     
+    from sqlalchemy.orm import defer
     result = await db.execute(
-        select(Outbreak).where(Outbreak.id == bid)
+        select(Outbreak).where(Outbreak.id == bid).options(defer(Outbreak.location))
     )
     outbreak = result.scalar_one_or_none()
     
@@ -547,9 +544,12 @@ async def get_outbreaks_geojson(
     # Get outbreaks from last N days
     start_date = datetime.now(timezone.utc) - timedelta(days=days)
     
+    from sqlalchemy.orm import defer
     query = select(Outbreak, Hospital).join(
         Hospital, Outbreak.hospital_id == Hospital.id
-    ).where(Outbreak.date_reported >= start_date)
+    ).where(Outbreak.date_reported >= start_date).options(
+        defer(Outbreak.location), defer(Hospital.location)
+    )
     
     if disease_type:
         query = query.where(Outbreak.disease_type == disease_type)
