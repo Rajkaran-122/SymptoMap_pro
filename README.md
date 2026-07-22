@@ -1,16 +1,16 @@
 <div align="center">
 
-<h1>🏥 The Healthcare AI Ecosystem</h1>
+<h1>The Healthcare AI Ecosystem</h1>
 <h3>Two Integrated Solutions for Complete Health Protection</h3>
 
 <p>
-  <a href="https://symtomap-main.vercel.app/" target="_blank"><img src="https://img.shields.io/badge/🌐%20SymptoMap%20Live-Main%20App-2563eb?style=for-the-badge" alt="SymptoMap Live" /></a>
+  <a href="https://symtomap-main.vercel.app/" target="_blank"><img src="https://img.shields.io/badge/SymptoMap%20Live-Main%20App-2563eb?style=for-the-badge" alt="SymptoMap Live" /></a>
   &nbsp;
-  <a href="https://symptomap-2-python.vercel.app/" target="_blank"><img src="https://img.shields.io/badge/🐍%20SymptoMap-Python%20Backend-16a34a?style=for-the-badge" alt="Python Backend" /></a>
+  <a href="https://symptomap-2-python.vercel.app/" target="_blank"><img src="https://img.shields.io/badge/SymptoMap-Python%20Backend-16a34a?style=for-the-badge" alt="Python Backend" /></a>
   &nbsp;
-  <a href="https://healthzy.app/" target="_blank"><img src="https://img.shields.io/badge/🤖%20Healthzy-AI%20Health%20App-7c3aed?style=for-the-badge" alt="Healthzy" /></a>
+  <a href="https://healthzy.app/" target="_blank"><img src="https://img.shields.io/badge/Healthzy-AI%20Health%20App-7c3aed?style=for-the-badge" alt="Healthzy" /></a>
   &nbsp;
-  <a href="https://github.com/Rajkaran-122/Health_agent" target="_blank"><img src="https://img.shields.io/badge/🧠%20Health%20Agent-AI%20Engine-ea580c?style=for-the-badge" alt="Health Agent" /></a>
+  <a href="https://github.com/Rajkaran-122/Health_agent" target="_blank"><img src="https://img.shields.io/badge/Health%20Agent-AI%20Engine-ea580c?style=for-the-badge" alt="Health Agent" /></a>
 </p>
 
 <p>
@@ -28,26 +28,26 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
-- [Overview](#-overview)
-- [The Two Platforms](#-the-two-platforms)
-- [Ecosystem Integration](#-how-the-ecosystem-works)
-- [Architecture](#-architecture)
-- [Key Features](#-key-features)
-- [Technology Stack](#-technology-stack)
-- [Live Demos & Links](#-live-demos--links)
-- [Pilot Results](#-proven-results-pilot-programs)
-- [Roadmap](#-roadmap)
-- [Documentation Directory](#-documentation-directory)
-- [Setup & Running](#-setup--running)
-- [Security & Ethics](#-security--ethics)
-- [License](#-license)
-- [Contact](#-contact)
+- [Overview](#overview)
+- [The Two Platforms](#the-two-platforms)
+- [How the Ecosystem Works](#how-the-ecosystem-works)
+- [Architecture](#architecture)
+- [Key Features](#key-features)
+- [Technology Stack](#technology-stack)
+- [Live Demos and Links](#live-demos-and-links)
+- [Pilot Results](#pilot-results)
+- [Roadmap](#roadmap)
+- [Documentation Directory](#documentation-directory)
+- [Setup and Running](#setup-and-running)
+- [Security and Ethics](#security-and-ethics)
+- [License](#license)
+- [Contact](#contact)
 
 ---
 
-## 🌐 Overview
+## Overview
 
 This ecosystem addresses two parallel crises in global healthcare:
 
@@ -62,7 +62,7 @@ This ecosystem addresses two parallel crises in global healthcare:
 
 ---
 
-## 🏥 The Two Platforms
+## The Two Platforms
 
 ### SYMPTOMAP — Real-Time Disease Surveillance
 
@@ -71,15 +71,15 @@ This ecosystem addresses two parallel crises in global healthcare:
 SYMPTOMAP is an interactive, map-based disease surveillance platform for healthcare professionals. Doctors can report outbreaks in under 30 seconds; administrators get a live dashboard of disease spread across India.
 
 **Core Capabilities:**
-- 🗺️ **Interactive MapLibre Map** — visualize outbreaks geographically with severity heatmaps
-- ⚡ **30-Second Submission** — doctor portal for rapid outbreak reporting
-- 📊 **Live Admin Dashboard** — real-time stats: 200,000+ seeded records across India
-- 🔔 **WebSocket Alerts** — instant broadcast to all connected users on new reports
-- 🧑‍⚕️ **Doctor Station** — secure authenticated portal for submissions and alert creation
-- 🏛️ **Admin Console** — approval workflows, broadcast system, verification pipeline
-- 📈 **Analytics Engine** — trend analysis, week-over-week comparisons, activity feeds
-- 🔐 **Role-Based Access** — Admin, Doctor, and Public tiers with JWT authentication
-- 🌐 **Air Quality Intelligence** — Urban AQI monitoring, epidemiological zoning, and viral fever risk prediction
+- **Interactive MapLibre Map** — visualize outbreaks geographically with severity heatmaps
+- **30-Second Submission** — doctor portal for rapid outbreak reporting
+- **Live Admin Dashboard** — real-time stats: 200,000+ seeded records across India
+- **WebSocket Alerts** — instant broadcast to all connected users on new reports
+- **Doctor Station** — secure authenticated portal for submissions and alert creation
+- **Admin Console** — approval workflows, broadcast system, verification pipeline
+- **Analytics Engine** — trend analysis, week-over-week comparisons, activity feeds
+- **Role-Based Access** — Admin, Doctor, and Public tiers with JWT authentication
+- **Air Quality Intelligence** — Urban AQI monitoring, epidemiological zoning, and viral fever risk prediction
 
 ---
 
@@ -90,35 +90,35 @@ SYMPTOMAP is an interactive, map-based disease surveillance platform for healthc
 The Health Agent is a 24/7 AI doctor accessible from any device, in any language. It accepts images, voice, and text to conduct an intelligent clinical interview and generate a diagnostic report with confidence scores.
 
 **Core Capabilities:**
-- 🖼️ **Image-Based Disease Detection** — multi-model ensemble with 85%+ accuracy
-- 🎙️ **Voice-Activated Consultation** — real-time voice via LiveKit WebRTC (<200ms latency)
-- 🌍 **Multilingual First** — designed for global accessibility, not English-centric
-- 🧠 **Multi-LLM Failover** — OpenAI + Claude + Grok with 99.9% uptime
-- 📋 **SOAP Note Generation** — clinical-format diagnostic reports with confidence scores
-- 🔗 **SYMPTOMAP Integration** — receives real-time outbreak alerts from SYMPTOMAP
-- 📱 **2G Compatible** — works on low-end devices in underserved areas
-- 📁 **Personal Health Records** — encrypted, user-controlled health history
+- **Image-Based Disease Detection** — multi-model ensemble with 85%+ accuracy
+- **Voice-Activated Consultation** — real-time voice via LiveKit WebRTC (<200ms latency)
+- **Multilingual First** — designed for global accessibility, not English-centric
+- **Multi-LLM Failover** — OpenAI + Claude + Grok with 99.9% uptime
+- **SOAP Note Generation** — clinical-format diagnostic reports with confidence scores
+- **SYMPTOMAP Integration** — receives real-time outbreak alerts from SYMPTOMAP
+- **2G Compatible** — works on low-end devices in underserved areas
+- **Personal Health Records** — encrypted, user-controlled health history
 
 ---
 
-## 🔗 How the Ecosystem Works
+## How the Ecosystem Works
 
 ```mermaid
 %%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#1e40af', 'primaryTextColor': '#ffffff', 'lineColor': '#60a5fa', 'mainBkg': '#0f172a', 'textColor': '#e2e8f0'}}}%%
 flowchart LR
-    subgraph Individual["🧑 Individual Layer"]
+    subgraph Individual["Individual Layer"]
         User["Patient / Public"]
         HA["Health Agent\nhealthzy.app"]
         User -->|"Voice / Image / Text"| HA
     end
 
-    subgraph Professional["🏥 Professional Layer"]
+    subgraph Professional["Professional Layer"]
         Doctor["Doctor / PHO"]
         SM["SYMPTOMAP\nsymtomap-main.vercel.app"]
         Doctor -->|"30-sec Submission"| SM
     end
 
-    subgraph Intelligence["🧠 Intelligence Layer"]
+    subgraph Intelligence["Intelligence Layer"]
         DB[("200K+ Records\nSQLite + PostGIS")]
         WS["WebSocket\nReal-Time Bridge"]
         AI["Multi-LLM\nOrchestration"]
@@ -128,7 +128,7 @@ flowchart LR
         AI -->|"SOAP Report"| HA
     end
 
-    subgraph Alerts["🔔 Alert Layer"]
+    subgraph AlertLayer["Alert Layer"]
         Broadcast["Broadcast System\nSMS / Push / WebSocket"]
         WS -->|"Outbreak in area"| Broadcast
         Broadcast -->|"Outbreak warning"| User
@@ -137,7 +137,7 @@ flowchart LR
     style Individual fill:#1e3a5f,stroke:#3b82f6
     style Professional fill:#14532d,stroke:#22c55e
     style Intelligence fill:#3b1f5e,stroke:#a855f7
-    style Alerts fill:#7c2020,stroke:#ef4444
+    style AlertLayer fill:#7c2020,stroke:#ef4444
 ```
 
 **The Integration Flow:**
@@ -149,7 +149,7 @@ flowchart LR
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ### SYMPTOMAP Architecture
 
@@ -299,39 +299,39 @@ flowchart TD
 
 ---
 
-## ✨ Key Features
+## Key Features
 
 ### SYMPTOMAP Features
 
 | Feature | Description |
 |---|---|
-| 🗺️ Interactive Map | MapLibre GL with outbreak markers, severity heatmaps, and zone boundaries |
-| ⚡ 30-Second Submission | Doctor submits disease, severity, location — complete in seconds |
-| 📊 Live Dashboard | Total reports, pending review, high priority, active cases — all real-time |
-| 🏛️ Admin Console | Approve/reject outbreak reports, manage broadcasts, verify submissions |
-| 📢 Broadcast System | Create and send public health advisories with urgency levels |
-| 🔔 WebSocket Real-Time | All clients receive instant updates without page refresh |
-| 📈 Analytics | Activity feed, week-over-week trends, disease distribution charts |
-| 🌫️ Air Quality Module | AQI monitoring, viral fever risk prediction, epidemiological zoning |
-| 🔐 Security | JWT auth, role-based access, audit logs, input sanitization, rate limiting |
-| 📋 Approval Workflow | Pending → Under Review → Approved/Rejected pipeline |
+| Interactive Map | MapLibre GL with outbreak markers, severity heatmaps, and zone boundaries |
+| 30-Second Submission | Doctor submits disease, severity, location — complete in seconds |
+| Live Dashboard | Total reports, pending review, high priority, active cases — all real-time |
+| Admin Console | Approve/reject outbreak reports, manage broadcasts, verify submissions |
+| Broadcast System | Create and send public health advisories with urgency levels |
+| WebSocket Real-Time | All clients receive instant updates without page refresh |
+| Analytics | Activity feed, week-over-week trends, disease distribution charts |
+| Air Quality Module | AQI monitoring, viral fever risk prediction, epidemiological zoning |
+| Security | JWT auth, role-based access, audit logs, input sanitization, rate limiting |
+| Approval Workflow | Pending to Under Review to Approved/Rejected pipeline |
 
 ### Health Agent Features
 
 | Feature | Description |
 |---|---|
-| 🎙️ Voice Consultation | Real-time voice via LiveKit WebRTC with sub-200ms latency |
-| 🖼️ Image Diagnosis | Upload photos for AI-powered disease detection — 85%+ accuracy |
-| 🌍 Multilingual | Supports Hindi, Tamil, Bengali, and more regional languages |
-| 🧠 Multi-LLM | OpenAI + Claude + Grok with automatic failover for 99.9% uptime |
-| 📋 SOAP Reports | Clinical-format reports with confidence scores, not just chatbot answers |
-| 🔗 Outbreak Alerts | Receives real-time warnings from SYMPTOMAP for affected areas |
-| 📱 Low-End Compatible | Works on basic 2G phones — designed for underserved populations |
-| 📁 Health Records | Personal health history management with encryption |
+| Voice Consultation | Real-time voice via LiveKit WebRTC with sub-200ms latency |
+| Image Diagnosis | Upload photos for AI-powered disease detection — 85%+ accuracy |
+| Multilingual | Supports Hindi, Tamil, Bengali, and more regional languages |
+| Multi-LLM | OpenAI + Claude + Grok with automatic failover for 99.9% uptime |
+| SOAP Reports | Clinical-format reports with confidence scores, not just chatbot answers |
+| Outbreak Alerts | Receives real-time warnings from SYMPTOMAP for affected areas |
+| Low-End Compatible | Works on basic 2G phones — designed for underserved populations |
+| Health Records | Personal health history management with encryption |
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 ### SYMPTOMAP
 
@@ -357,7 +357,7 @@ flowchart TD
 
 ---
 
-## 🔗 Live Demos & Links
+## Live Demos and Links
 
 | Platform | Link | Description |
 |---|---|---|
@@ -368,7 +368,7 @@ flowchart TD
 
 ---
 
-## 📊 Proven Results: Pilot Programs
+## Pilot Results
 
 ### SYMPTOMAP Pilot — 50 Doctors, 2 Months
 
@@ -394,23 +394,23 @@ Zero data loss. 3 outbreak clusters detected and contained early.
 
 ---
 
-## 🗺️ Roadmap
+## Roadmap
 
-### Phase 1 — Months 1–6
-- [ ] Deploy in 3–5 pilot regions across India
-- [ ] Onboard 1,000 users & 500 doctors
+### Phase 1 — Months 1 to 6
+- [ ] Deploy in 3 to 5 pilot regions across India
+- [ ] Onboard 1,000 users and 500 doctors
 - [ ] Add 7 more languages (total 10 supported)
 - [ ] Email/SMS notification system
 - [ ] Mobile PWA launch
 
-### Phase 2 — Months 7–12
+### Phase 2 — Months 7 to 12
 - [ ] Scale to 50,000 users
 - [ ] ML-based outbreak prediction engine
 - [ ] Hospital system API integration
 - [ ] Native mobile apps (iOS/Android)
 - [ ] Advanced analytics dashboard
 
-### Phase 3 — Year 2+
+### Phase 3 — Year 2 and beyond
 - [ ] 1M users, 100K doctors
 - [ ] National health system integration
 - [ ] 50+ countries deployment
@@ -481,8 +481,7 @@ Intellectual property terms, restrictions on reproduction and commercial use, an
 
 ---
 
-
-## ⚙️ Setup & Running
+## Setup and Running
 
 ### Prerequisites
 - Node.js 18+, Python 3.10+, npm / pip
@@ -519,7 +518,7 @@ Frontend: `http://localhost:5173` &nbsp;·&nbsp; Backend API: `http://localhost:
 
 ---
 
-## 🔐 Security & Ethics
+## Security and Ethics
 
 ### Security Architecture
 - **HIPAA-Compliant** architecture with end-to-end encryption
@@ -531,7 +530,7 @@ Frontend: `http://localhost:5173` &nbsp;·&nbsp; Backend API: `http://localhost:
 ### Ethical Principles
 - **Privacy First** — User data controlled by the user, never sold
 - **AI Assists, Does Not Replace** — Transparent confidence scores on every diagnosis
-- **Equity & Inclusion** — Free tier, multilingual, 2G-compatible for underserved populations
+- **Equity and Inclusion** — Free tier, multilingual, 2G-compatible for underserved populations
 - **Transparency** — Open-source core, explainable AI outputs, regular audits
 - **Social Impact** — Free deployment for government/NGOs; anonymized data for medical research only with consent
 
@@ -539,26 +538,26 @@ Frontend: `http://localhost:5173` &nbsp;·&nbsp; Backend API: `http://localhost:
 
 ---
 
-## 📜 License
+## License
 
 This repository and all its contents are **Proprietary and Confidential**.
 
-**Copyright © 2026 Rajkaran Yadav. All rights reserved.**
+**Copyright 2026 Rajkaran Yadav. All rights reserved.**
 
 Unauthorized reproduction, distribution, or commercial use is strictly prohibited. See [`docs/PROPRIETARY_NOTICE.md`](./docs/PROPRIETARY_NOTICE.md) for full terms. For commercial licensing, government deployment, or partnership opportunities — contact directly.
 
 ---
 
-## 📬 Contact
+## Contact
 
-**Rajkaran Yadav** — Team Lead · Full-Stack Developer · Healthcare AI Systems Specialist
+**Rajkaran Yadav** — Team Lead, Full-Stack Developer, Healthcare AI Systems Specialist
 
-- 📞 [+91-9975889977](tel:+919975889977)
-- 🐙 [github.com/Rajkaran-122](https://github.com/Rajkaran-122)
-- 🌐 [symtomap-main.vercel.app](https://symtomap-main.vercel.app/)
+- Phone: [+91-9975889977](tel:+919975889977)
+- GitHub: [github.com/Rajkaran-122](https://github.com/Rajkaran-122)
+- Live App: [symtomap-main.vercel.app](https://symtomap-main.vercel.app/)
 
 **Key Skills:** Frontend (React, Next.js) · Backend (Python, Node.js) · AI/ML · Databases · System Architecture
 
 ---
 
-> *"Every person has instant access to quality healthcare. Every outbreak is detected before becoming an epidemic."*
+> "Every person has instant access to quality healthcare. Every outbreak is detected before becoming an epidemic."
