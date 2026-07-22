@@ -1,10 +1,10 @@
-# AeroIntel: AI-Powered Urban Air Quality & Epidemiological Intelligence
+# AeroIntel: AI-Powered Urban Air Quality, Viral Fever Prediction & Public Health Chatbot
 
 [![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)](docs/PROPRIETARY_NOTICE.md)
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=flat&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)](https://reactjs.org/)
 
-**AeroIntel** is a multi-agent, AI-driven Smart City intervention platform. It fuses real-time IoT air quality monitoring with predictive epidemiological zoning to stop pollution at the source and forecast viral fever outbreaks before they overwhelm public health infrastructure.
+**AeroIntel** is a comprehensive, multi-agent AI ecosystem. It fuses real-time IoT urban air quality monitoring with predictive data systems for viral fevers, and provides a direct-to-patient AI Health Chatbot. This holistic approach stops pollution at the source while forecasting and mitigating public health crises before they overwhelm medical infrastructure.
 
 *This repository is submitted for the **AI-Powered Urban Air Quality Intelligence for Smart City Intervention** challenge.*
 

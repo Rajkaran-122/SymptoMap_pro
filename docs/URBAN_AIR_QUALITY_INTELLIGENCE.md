@@ -1,4 +1,4 @@
-# AeroIntel: AI-Powered Urban Air Quality & Epidemiological Intelligence
+# AeroIntel: AI-Powered Urban Air Quality, Viral Fever Prediction & Public Health Chatbot
 
 *A comprehensive, production-ready platform designed for the Smart City Intervention Challenge.*
 
@@ -9,7 +9,7 @@ India's air quality crisis is a nationwide urban emergency. Cities like Delhi, M
 
 Despite 900+ Continuous Ambient Air Quality Monitoring Stations (CAAQMS) deployed across India, a 2024 audit revealed only 31% of monitored cities have actionable response protocols. 
 
-**The Winning Differentiator**: Data exists, but the intelligence to act upon it does not. AeroIntel bridges this gap by merging environmental intelligence with a battle-tested **population-level surveillance architecture**. It doesn't just measure pollution; it forecasts health crises (like viral fevers) and orchestrates multi-agency enforcement and citizen advisories in real-time.
+**The Winning Differentiator**: Data exists, but the intelligence to act upon it does not. AeroIntel bridges this gap by merging environmental intelligence with a battle-tested **population-level surveillance architecture and a direct-to-patient AI chatbot**. It doesn't just measure pollution; it forecasts viral fever outbreaks based on data, orchestrates multi-agency enforcement, and interacts directly with citizens via a clinical reasoning chatbot in real-time.
 
 ---
 
